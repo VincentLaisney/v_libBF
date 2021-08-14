@@ -134,9 +134,11 @@ pub mut:
     flags   u32
 }
 
+pub const def_precision = u64(32 * 32) // 1024 bits, about 300 digits
+
 pub fn get_def_ctx () MathContext {
     return MathContext {
-        prec: u64(32 * 64 * 3.321928094887362)
+        prec: def_precision
         rnd:  .rndn // rounding to the nearest (as in julia)
         flags: 0
     }
@@ -185,13 +187,13 @@ const radix_max =  36 /* maximum radix for bf_atof() and bf_ftoa() */
 // // }
 
 // import from bf_utils
-fn C.get_bf_context() &Context
+fn C.get_bf_context_float() &Context
 fn C.get_bf_retval () int
 fn C.set_bf_retval (retval int)
 
 [inline]
 fn get_bf_context() &Context {
-    return C.get_bf_context()
+    return C.get_bf_context_float()
 }
 [inline]
 fn set_bf_retval (retval int) {
@@ -290,20 +292,20 @@ pub fn (mut r Bigfloat) neg() {
 
 fn C.bf_is_finite(a &C.bf_t) int
 
-pub fn (a Bigfloat) is_finite() int {
-	return C.bf_is_finite(&a) 
+pub fn (a Bigfloat) is_finite() bool {
+	return C.bf_is_finite(&a) != 0
 }
 
 fn C.bf_is_nan(a &C.bf_t) int
 
-pub fn (a Bigfloat) is_nan() int {
-	return C.bf_is_nan(&a)
+pub fn (a Bigfloat) is_nan() bool {
+	return C.bf_is_nan(&a) != 0
 }
 
 fn C.bf_is_zero(a &C.bf_t) int
 
-pub fn (a Bigfloat) is_zero() int {
-	return C.bf_is_zero(&a)
+pub fn (a Bigfloat) is_zero() bool {
+	return C.bf_is_zero(&a) != 0
 }
 
 // fn C.bf_memcpy(r &C.bf_t, a &C.bf_t)
@@ -527,12 +529,12 @@ pub fn (a Bigfloat) div_ctx(b Bigfloat, ctx MathContext) Bigfloat {
 }
 
 
-pub fn (a Bigfloat) / (b Bigfloat) Bigfloat {
-    mut q := new()
-    mut ctx := get_def_ctx()
-    ret_val = C.div(mut q, a, b, ctx.prec, ctx.flags, ctx.rnd)
-    return q
-}
+// pub fn (a Bigfloat) / (b Bigfloat) Bigfloat {
+//     mut q := new()
+//     mut ctx := get_def_ctx()
+//     ret_val = C.div(mut q, a, b, ctx.prec, ctx.flags, ctx.rnd)
+//     return q
+// }
 
 fn C.bf_rem(r &C.bf_t, a &C.bf_t, b &C.bf_t, prec u64, flags u32, rnd_mode Round) int
 
@@ -629,6 +631,14 @@ pub const atof_no_nan_inf =    (1 << 18)
 /* return the exponent separately */
 pub const atof_exponent =        (1 << 19)
 
+pub struct PrintContext {
+pub mut:
+    base    int
+    prec    u64
+    flags   u32
+    rnd     Round
+}
+
 fn C.bf_atof(a &C.bf_t, str &char, pnext &&char, radix int, prec u64, flags u32) int 
 
 // pub fn atof(mut a Bigfloat, str &char, pnext &&char, radix int, prec u64, flags u32) int {
@@ -639,15 +649,26 @@ fn C.bf_atof(a &C.bf_t, str &char, pnext &&char, radix int, prec u64, flags u32)
    exponent */
 fn C.bf_atof2(r &C.bf_t, pexponent &i64, str &char, pnext &&char, radix int, prec u64, flags u32) int
 
-pub fn from_str_base(str string, radix int) Bigfloat {
+pub fn from_str_ctx(str string, mut ctx PrintContext) ?Bigfloat {
     r := new()
-    retval := C.bf_atof(&r, str.str, voidptr(0), radix, prec_inf, atof_bin_oct)
+    if ctx.prec == 0 {
+        ctx.prec = def_precision
+    }
+    retval := C.bf_atof(&r, str.str, voidptr(0), ctx.base, ctx.prec, ctx.flags)
+    if retval != 0 {
+        return error('$retval')
+    }
     set_bf_retval(retval)
     return r
 }
 
-pub fn from_str(str string) Bigfloat {
-    return from_str_base(str, 10)
+pub fn from_str(str string) ?Bigfloat {
+    mut ctx := PrintContext {
+        base: 10
+        prec: def_precision
+        flags: 0
+    }
+    return from_str_ctx(str, mut ctx)
 }
 // fn C.bf_mul_pow_radix(r &bf_t, T &bf_t, radix u64, expn i64, prec u64, flags u32) int
 
@@ -697,10 +718,10 @@ pub const ftoa_js_quirks =     (1 << 22)
 
 fn C.bf_ftoa(plen &u64, a &C.bf_t, radix int, prec u64,  flags u32) &char
 
-pub fn (a Bigfloat) str_base(radix int) string {
+pub fn (a Bigfloat) str_ctx(mut ctx PrintContext) string {
     plen := u64(0)
     if a.len > 0 {
-        c_str := C.bf_ftoa(&plen, &a, radix, 0,  ftoa_format_frac | int(Round.rndn))
+        c_str := C.bf_ftoa(&plen, &a, ctx.base, ctx.prec,  ctx.flags | u32(ctx.rnd))
         str := ''
         unsafe { str = c_str.vstring() }
         return str
@@ -710,7 +731,12 @@ pub fn (a Bigfloat) str_base(radix int) string {
 }
 
 pub fn (a Bigfloat) str() string {
-    return a.str_base(10)
+    mut ctx := PrintContext {
+        base: 10
+        prec: 12
+        rnd: .rndn
+    }
+    return a.str_ctx(mut ctx)
 }
 
 // /* modulo 2^n instead of saturation. NaN and infinity return 0 */
