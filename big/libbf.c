@@ -1746,9 +1746,13 @@ int bf_divrem(bf_t *q, bf_t *r, const bf_t *a, const bf_t *b,
         if (a->expn == BF_EXP_NAN || b->expn == BF_EXP_NAN) {
             bf_set_nan(r);
             return 0;
-        } else if (a->expn == BF_EXP_INF || b->expn == BF_EXP_ZERO) {
+        } else if (a->expn == BF_EXP_INF && b->expn == BF_EXP_ZERO) {
             bf_set_nan(r);
             return BF_ST_INVALID_OP;
+        } else if (b->expn == BF_EXP_ZERO) {
+            bf_set_inf(q, a->sign);
+            bf_set_zero(r, a->sign);
+            return BF_ST_DIVIDE_ZERO;
         } else {
             bf_set(r, a);
             return bf_round(r, prec, flags);

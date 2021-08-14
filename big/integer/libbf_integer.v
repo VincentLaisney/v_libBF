@@ -236,6 +236,10 @@ pub fn context_end(s Context) {
 /* free memory allocated for the bf cache data */
 fn C.bf_clear_cache(s &C.bf_context_t)
 
+pub fn clear_cache(s &Context) {
+	C.bf_clear_cache(s)
+}
+
 // // fn C.*bf_realloc(*s bf_context_t, ptr voidptr, size size_t)
 // // {
 // //     return s->realloc_func(s->realloc_opaque, ptr, size)
@@ -277,25 +281,30 @@ fn C.bf_delete(r &C.bf_t)
 pub fn delete(r Bigint) {
     C.bf_delete(&r)
 }
-// fn C.bf_neg(r &C.bf_t)
-// // {
-// //     r->sign ^= 1;
-// // }
 
-// fn C.bf_is_finite(a &C.bf_t) int
-// // {
-// //     return (a->expn < BF_EXP_INF)
-// // }
+fn C.bf_neg(r &C.bf_t)
 
-// fn C.bf_is_nan(a &C.bf_t) int
-// // {
-// //     return (a->expn == BF_EXP_NAN)
-// // }
+pub fn (mut r Bigint) neg() {
+	C.bf_neg(&r)
+}
 
-// fn C.bf_is_zero(a &C.bf_t) int
-// // {
-// //     return (a->expn == BF_EXP_ZERO)
-// // }
+fn C.bf_is_finite(a &C.bf_t) int
+
+pub fn (a Bigint) is_finite() bool {
+	return C.bf_is_finite(&a) != 0
+}
+
+fn C.bf_is_nan(a &C.bf_t) int
+
+pub fn (a Bigint) is_nan() bool {
+	return C.bf_is_nan(&a) != 0
+}
+
+fn C.bf_is_zero(a &C.bf_t) int
+
+pub fn (a Bigint) is_zero() bool {
+	return C.bf_is_zero(&a) != 0
+}
 
 // fn C.bf_memcpy(r &C.bf_t, a &C.bf_t)
 // // {
@@ -320,9 +329,24 @@ pub fn from_i64(a i64) Bigint {
     return r
 }
 
-// fn C.bf_set_nan(r &C.bf_t)
-// fn C.bf_set_zero(r &C.bf_t, is_neg int)
-// fn C.bf_set_inf(r &C.bf_t, is_neg int)
+fn C.bf_set_nan(r &C.bf_t)
+
+pub fn set_nan(mut r Bigint) {
+	C.bf_set_nan(&r)
+}
+
+fn C.bf_set_zero(r &C.bf_t, is_neg int)
+
+pub fn set_zero(mut r Bigint, is_neg int) {
+	C.bf_set_zero(&r, is_neg)
+}
+
+fn C.bf_set_inf(r &C.bf_t, is_inf int)
+
+pub fn set_inf(mut r Bigint, is_inf int) {
+	C.bf_set_inf(&r, is_inf)
+}
+
 fn C.bf_set(r &C.bf_t, a &C.bf_t) int
 
 pub fn set(mut r Bigint, a Bigint) int {
@@ -444,13 +468,13 @@ pub fn (a Bigint) * (b Bigint) Bigint {
 
 fn C.bf_mul_ui(r &C.bf_t, a &C.bf_t, b1 u64, prec u64, flags u32) int
 
-pub fn mul_ui(mut r Bigint, a Bigint, b1 u64, prec u64, flags u32) int {
+pub fn mul_u64(mut r Bigint, a Bigint, b1 u64, prec u64, flags u32) int {
 	return C.bf_mul_ui(&r, &a, b1, prec, flags)
 }
 
 fn C.bf_mul_si(r &C.bf_t, a &C.bf_t, b1 i64, prec u64, flags u32) int
 
-pub fn mul_si(mut r Bigint, a Bigint, b1 i64, prec u64, flags u32) int {
+pub fn mul_i64(mut r Bigint, a Bigint, b1 i64, prec u64, flags u32) int {
 	return C.bf_mul_si(&r, &a, b1, prec, flags)
 }
 
@@ -736,7 +760,21 @@ pub fn (a Bigint) i64() i64 {
 // fn C.bf_exp(r &bf_t, a &bf_t, prec u64, flags u32) int
 // fn C.bf_log(r &bf_t, a &bf_t, prec u64, flags u32) int
 // // #define BF_POW_JS_QUIRKS (1 << 16) /* (+/-1)^(+/-Inf) = NaN, 1^NaN = NaN */
-// fn C.bf_pow(r &bf_t, x &bf_t, y &bf_t, prec u64, flags u32) int
+fn C.bf_pow(r &C.bf_t, x &C.bf_t, y &C.bf_t, prec u64, flags u32) int
+
+pub fn power_ctx(x Bigint, y Bigint, ctx MathContext) Bigint {
+    r := new()
+    if cmp(y, new()) < 0 { panic('the exponent of power must be >= 0') }
+    retval := C.bf_pow(&r, &x, &y, ctx.prec, ctx.flags)
+    set_bf_retval(retval)
+    return r
+}
+
+pub fn power(x Bigint, y Bigint) Bigint {
+    ctx := get_def_ctx()
+    return power_ctx(x, y, ctx)
+}
+
 // fn C.bf_cos(r &bf_t, a &bf_t, prec u64, flags u32) int
 // fn C.bf_sin(r &bf_t, a &bf_t, prec u64, flags u32) int
 // fn C.bf_tan(r &bf_t, a &bf_t, prec u64, flags u32) int

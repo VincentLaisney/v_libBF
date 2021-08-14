@@ -1,5 +1,6 @@
 // libbf_integer_test.v
 import libbf.big.integer as big
+import os
 
 fn test_new_big() {
 	n := big.new()
@@ -335,32 +336,35 @@ fn test_sqrtrem() {
 	assert '${r}' == '8'
 	assert '${rem}' == '5'
 }
-/*
-fn test_factorial() {
-	f5 := big.factorial(5)
-	assert f5.str_base (16) == '78'
-	f100 := big.factorial(100)
-	assert f100.str_base (16) == '1b30964ec395dc24069528d54bbda40d16e966ef9a70eb21b5b2943a321cdf10391745570cca9420c6ecb3b72ed2ee8b02ea2735c61a000000000000000000000000'
+
+fn test_div_zero() {
+	c := big.from_u64(94837262) / big.from_u64(0)
+	assert big.get_bf_retval() == big.bf_st_divide_zero
+	assert ! c.is_finite() // is inf
+	assert c.str() == '0'
 }
-*/
-// fn trimbytes(n int, x []byte) []byte {
-// 	mut res := x.clone()
-// 	res.trim(n)
-// 	return res
-// }
 
-// fn test_bytes() {
-// 	assert big.from_i64(0).bytes().len == 128
-// 	assert big.from_hex_string('e'.repeat(100)).bytes().len == 128
-// 	assert trimbytes(3, big.from_i64(1).bytes()) == [byte(0x01), 0x00, 0x00]
-// 	assert trimbytes(3, big.from_i64(1024).bytes()) == [byte(0x00), 0x04, 0x00]
-// 	assert trimbytes(3, big.from_i64(1048576).bytes()) == [byte(0x00), 0x00, 0x10]
-// }
+fn test_power() {
+	x := big.from_u64(43)
+	y := big.from_u64(14)
+	r := big.power(x, y)
+	assert '${r}' == '73885357344138503765449'
+}
 
-// fn test_bytes_trimmed() {
-// 	assert big.from_i64(0).bytes_trimmed().len == 0
-// 	assert big.from_hex_string('AB'.repeat(50)).bytes_trimmed().len == 50
-// 	assert big.from_i64(1).bytes_trimmed() == [byte(0x01)]
-// 	assert big.from_i64(1024).bytes_trimmed() == [byte(0x00), 0x04]
-// 	assert big.from_i64(1048576).bytes_trimmed() == [byte(0x00), 0x00, 0x10]
-// }
+fn test_negative_pow() {
+	vexe := os.getenv('VEXE')
+	test_file := 'tests/negative_power_test.v'
+	test := os.execute('$vexe $test_file')
+	assert test.exit_code == 1
+	// print(test.output)
+	test.output.contains('V panic: the exponent of power must be >= 0')
+}
+
+fn test_tests() {
+	a := big.from_i64(0)
+	b := big.from_str('748483938485767849392011988460')
+	assert a.is_zero()
+	assert a.is_finite()
+	assert ! b.is_zero()
+	assert b.is_finite()
+}
