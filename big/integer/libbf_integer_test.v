@@ -31,11 +31,21 @@ fn test_from_u64() {
 	assert big.from_u64(-1).str_base (16) == 'ffffffffffffffff'
 }
 
+fn test_from_f64() {
+	assert big.from_f64(9484.0).str() == '9484'
+	assert big.from_f64(1369).str() == '1369'
+	assert big.from_f64(483e3).str() == '483000'
+	assert big.from_f64(37953.34).str() == '37953'
+	assert big.from_f64(6393.83).str() == '6394'
+}
+
 fn test_from_str() {
 	assert big.from_str('9870123').str() == '9870123'
 	assert big.from_str('').str() == '0'
 	assert big.from_str('0').str() == '0'
 	assert big.from_str('1').str() == '1'
+	assert big.from_str('456.112').str() == '456'
+	assert big.from_str('9383.75').str() == '9384'
 	for i := 1; i < 307; i += 61 {
 		input := '9'.repeat(i)
 		out := big.from_str(input).str()
