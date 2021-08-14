@@ -370,7 +370,8 @@ pub fn from_f64(d f64) Bigint {
     mut r := new() 
 	retval := C.bf_set_float64(&r, d)
     set_bf_retval(retval)
-    return r
+    r.rint() // for Bigint
+return r
 }
 
 
@@ -642,10 +643,11 @@ pub const atof_exponent =        (1 << 19)
 fn C.bf_atof2(r &C.bf_t, pexponent &i64, str &char, pnext &&char, radix int, prec u64, flags u32) int
 
 pub fn from_str_base(str string, radix int) Bigint {
-    r := new()
+    mut r := new()
     pexponent := i64(0) 
     retval := C.bf_atof2(&r, &pexponent, str.str, voidptr(0), radix, prec_inf, atof_bin_oct)
     set_bf_retval(retval)
+    r.rint() // for Bigint
     return r
 }
 
