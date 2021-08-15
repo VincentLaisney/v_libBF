@@ -134,7 +134,7 @@ pub mut:
     flags   u32
 }
 
-pub fn get_def_ctx () MathContext {
+pub fn get_def_math_ctx () MathContext {
     return MathContext {
         prec: prec_inf
         rnd:  .rndn
@@ -357,7 +357,7 @@ pub fn set(mut r Bigint, a Bigint) int {
 fn C.bf_get_float64(a &C.bf_t, pres &f64, rnd_mode Round) int
 
 pub fn (a Bigint) f64() f64 {
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
     pres := f64(0.0)
 	retval := C.bf_get_float64(&a, &pres, ctx.rnd)
     set_bf_retval(retval)
@@ -401,7 +401,7 @@ fn C.bf_add(r &C.bf_t, a &C.bf_t, b &C.bf_t, prec u64, flags u32) int
 
 pub fn (a Bigint) + (b Bigint) Bigint {
     r := new()
-    ctx := get_def_ctx ()
+    ctx := get_def_math_ctx ()
 	retval := C.bf_add(&r, &a, &b, ctx.prec, ctx.flags)
     set_bf_retval(retval)
     return r
@@ -418,7 +418,7 @@ fn C.bf_sub(r &C.bf_t, a &C.bf_t, b &C.bf_t, prec u64, flags u32) int
 
 pub fn (a Bigint) - (b Bigint) Bigint {
     r := new()
-    ctx := get_def_ctx ()
+    ctx := get_def_math_ctx ()
 	retval := C.bf_sub(&r, &a, &b, ctx.prec, ctx.flags)
     set_bf_retval(retval)
     return r
@@ -441,7 +441,7 @@ pub fn (a Bigint) add_i64_ctx(b1 i64, ctx MathContext) Bigint {
 }
 
 pub fn (a Bigint) add_i64(b1 i64) Bigint {
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
     return a.add_i64_ctx(b1, ctx)
 }
 
@@ -461,7 +461,7 @@ fn C.bf_mul(r &C.bf_t, a &C.bf_t, b &C.bf_t, prec u64, flags u32) int
 
 pub fn (a Bigint) * (b Bigint) Bigint {
 	mut r := new()
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
     retval := C.bf_mul(&r, &a, &b, ctx.prec, ctx.flags)
     set_bf_retval(retval)
     return r
@@ -482,7 +482,7 @@ pub fn mul_i64(mut r Bigint, a Bigint, b1 i64, prec u64, flags u32) int {
 fn C.bf_mul_2exp(r &C.bf_t, e i64, prec u64, flags u32) int
 
 pub fn (mut r Bigint) mul_2exp(e i64) {
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
 	retval := C.bf_mul_2exp(&r, e , ctx.prec , ctx.flags | u32(ctx.rnd))
     set_bf_retval(retval)
     r.rint() // for Bigint
@@ -506,7 +506,7 @@ fn C.bf_divrem(q &C.bf_t, r &C.bf_t, a &C.bf_t, b &C.bf_t, prec u64, flags u32, 
 pub fn divrem(a Bigint, b Bigint) (Bigint, Bigint) {
     q := new()
     r := new()
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
 	retval := C.bf_divrem(&q, &r, &a, &b, ctx.prec, ctx.flags, ctx.rnd)
     set_bf_retval(retval)
     return q, r
@@ -526,7 +526,7 @@ pub fn (a Bigint) div_ctx(b Bigint, ctx MathContext) Bigint {
 }
 
 pub fn (a Bigint) / (b Bigint) Bigint {
-    mut ctx := get_def_ctx()
+    mut ctx := get_def_math_ctx()
     ctx.rnd = .rndz // rnd toward zero for standard integer division
     q, _ := divrem_ctx(a, b, ctx)
     return q
@@ -542,7 +542,7 @@ pub fn (a Bigint) rem_ctx(b Bigint, ctx MathContext) Bigint {
 }
 
 pub fn (a Bigint) % (b Bigint) Bigint {
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
     return a.rem_ctx(b, ctx)
 }
 
@@ -556,7 +556,7 @@ pub fn remquo(pq &i64, mut r Bigint, a Bigint, b Bigint, prec u64, flags u32, rn
 fn C.bf_rint(r &C.bf_t, rnd_mode Round) int
 
 pub fn (mut r Bigint) rint() {
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
 	retval := C.bf_rint(&r, ctx.rnd)
     set_bf_retval(retval)
 }
@@ -591,7 +591,7 @@ pub fn isqrt(a Bigint) Bigint {
 
 // pub fn sqrt(a Bigint) Bigint {
 // 	r := new()
-//     ctx := get_def_ctx()
+//     ctx := get_def_math_ctx()
 //     retval := C.bf_sqrt(&r, &a, ctx.prec, ctx.flags)
 //     set_bf_retval(retval)
 //     return r
@@ -728,7 +728,7 @@ fn C.bf_get_int32(pres &int, a &C.bf_t, flags int) int
 
 pub fn (a Bigint) int() int {
     pres := int(0)
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
 	retval := C.bf_get_int32(&pres, &a, ctx.flags)
     set_bf_retval(retval)
     return pres
@@ -738,7 +738,7 @@ fn C.bf_get_int64(pres &i64, a &C.bf_t, flags int) int
 
 pub fn (a Bigint) i64() i64 {
     pres := i64(0)
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
 	retval := C.bf_get_int64(&pres, &a, ctx.flags)
     set_bf_retval(retval)
     return pres
@@ -777,7 +777,7 @@ pub fn power_ctx(x Bigint, y Bigint, ctx MathContext) Bigint {
 }
 
 pub fn power(x Bigint, y Bigint) Bigint {
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
     return power_ctx(x, y, ctx)
 }
 

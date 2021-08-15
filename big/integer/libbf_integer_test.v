@@ -155,7 +155,7 @@ fn test_add() {
 	a := big.from_str('833783942383378394238337839423') or {panic('')}
 	b := big.from_str('968349588796834958879683495887') or {panic('')}
 	assert '${b + a}' == '1802133531180213353118021335310'
-	mut ctx := big.get_def_ctx()
+	mut ctx := big.get_def_math_ctx()
 	ctx.prec = 40
 	nb_dig := ctx.prec / 3
 	c := a.add(b, ctx)
@@ -206,7 +206,7 @@ fn test_sub() {
 	a := big.from_str('833783942383378394238337839423') or {panic('')}
 	b := big.from_str('968349588796834958879683495887') or {panic('')}
 	assert '${b - a}' == '134565646413456564641345656464'
-	mut ctx := big.get_def_ctx()
+	mut ctx := big.get_def_math_ctx()
 	ctx.prec = 40
 	nb_dig := int(f64(ctx.prec) / 3.321928094887362)
 	c := b.sub(a, ctx)
@@ -265,7 +265,7 @@ fn test_divide() {
 	assert b.str_base (16) == '1'
 	a = big.from_str('12345678901234567890') or {panic('')}
 	b = big.from_str('281474976710656') or {panic('')}
-	mut ctx := big.get_def_ctx()
+	mut ctx := big.get_def_math_ctx()
 	ctx.rnd = .rndz
 	assert '${a.div_ctx(b, ctx)}' == '43860'
 	a = big.from_str('12345678901234567890') or {panic('')}
@@ -321,7 +321,7 @@ fn divide_mod_inner(a int, b int) {
 }
 
 fn test_ceil_div() {
-	mut ctx := big.get_def_ctx()
+	mut ctx := big.get_def_math_ctx()
 	ctx.rnd = .rndu
 	mut a := big.from_i64(495943893)
 	mut b := a.div_ctx(big.from_i64(594837), ctx)
@@ -332,7 +332,7 @@ fn test_ceil_div() {
 }
 
 fn test_floor_div() {
-	mut ctx := big.get_def_ctx()
+	mut ctx := big.get_def_math_ctx()
 	ctx.rnd = .rndd
 	mut a := big.from_i64(495943893)
 	mut b := a.div_ctx(big.from_i64(594837), ctx)
@@ -343,7 +343,7 @@ fn test_floor_div() {
 }
 
 fn test_trunc_div() {
-	mut ctx := big.get_def_ctx()
+	mut ctx := big.get_def_math_ctx()
 	ctx.rnd = .rndz // toward zero
 	mut a := big.from_i64(495943893)
 	mut b := a.div_ctx(big.from_i64(594837), ctx)
@@ -354,7 +354,7 @@ fn test_trunc_div() {
 }
 
 fn test_nearest_div() {
-	mut ctx := big.get_def_ctx()
+	mut ctx := big.get_def_math_ctx()
 	ctx.rnd = .rndn // toward nearest or even
 	mut a := big.from_i64(495943893)
 	mut b := a.div_ctx(big.from_i64(594837), ctx)
