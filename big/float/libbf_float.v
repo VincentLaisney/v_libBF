@@ -21,8 +21,10 @@
 // SOFTWARE.
 
 module float
-
 // wrapper for libbf https://bellard.org/libbf/
+
+// import libbf.big.integer as bigint
+
 #flag @VMODROOT/big/libbf.o
 #flag @VMODROOT/big/cutils.o
 #flag @VMODROOT/big/bf_utils.o
@@ -633,10 +635,20 @@ pub const atof_exponent =        (1 << 19)
 
 pub struct PrintContext {
 pub mut:
-    base    int
-    prec    u64
-    flags   u32
-    rnd     Round
+    base        int
+    prec        u64
+    flags       u32
+    rnd         Round
+    dont_trim   bool
+}
+
+pub struct AtofContext {
+pub mut:
+    base        int
+    prec        u64
+    flags       u32
+    rnd         Round
+    accept_nan  bool
 }
 
 fn C.bf_atof(a &C.bf_t, str &char, pnext &&char, radix int, prec u64, flags u32) int 
@@ -647,28 +659,28 @@ fn C.bf_atof(a &C.bf_t, str &char, pnext &&char, radix int, prec u64, flags u32)
 
 /* this version accepts prec = BF_PREC_INF and returns the radix
    exponent */
-fn C.bf_atof2(r &C.bf_t, pexponent &i64, str &char, pnext &&char, radix int, prec u64, flags u32) int
+// fn C.bf_atof2(r &C.bf_t, pexponent &i64, str &char, pnext &&char, radix int, prec u64, flags u32) int
 
-pub fn from_str_ctx(str string, mut ctx PrintContext) ?Bigfloat {
+pub fn from_str_ctx(str string, ctx AtofContext) ?Bigfloat {
     r := new()
-    if ctx.prec == 0 {
-        ctx.prec = def_precision
-    }
     retval := C.bf_atof(&r, str.str, voidptr(0), ctx.base, ctx.prec, ctx.flags)
     if retval != 0 {
         return error('$retval')
     }
     set_bf_retval(retval)
+    if r.is_nan() {
+        return error('NaN: invalid string')
+    }
     return r
 }
 
 pub fn from_str(str string) ?Bigfloat {
-    mut ctx := PrintContext {
+    mut ctx := AtofContext {
         base: 10
         prec: def_precision
         flags: 0
     }
-    return from_str_ctx(str, mut ctx)
+    return from_str_ctx(str, ctx)
 }
 // fn C.bf_mul_pow_radix(r &bf_t, T &bf_t, radix u64, expn i64, prec u64, flags u32) int
 
@@ -718,25 +730,34 @@ pub const ftoa_js_quirks =     (1 << 22)
 
 fn C.bf_ftoa(plen &u64, a &C.bf_t, radix int, prec u64,  flags u32) &char
 
-pub fn (a Bigfloat) str_ctx(mut ctx PrintContext) string {
+pub fn (a Bigfloat) str_ctx(ctx PrintContext) string {
     plen := u64(0)
-    if a.len > 0 {
-        c_str := C.bf_ftoa(&plen, &a, ctx.base, ctx.prec,  ctx.flags | u32(ctx.rnd))
-        str := ''
-        unsafe { str = c_str.vstring() }
-        return str
+    c_str := C.bf_ftoa(&plen, &a, ctx.base, ctx.prec,  ctx.flags | u32(ctx.rnd))
+    str := ''
+    unsafe { str = c_str.vstring() }
+    if ! ctx.dont_trim {
+        return trim_zeros(str)
     } else {
-        return '0'
+        return str
     }
 }
 
-pub fn (a Bigfloat) str() string {
-    mut ctx := PrintContext {
-        base: 10
-        prec: 12
-        rnd: .rndn
+fn trim_zeros(s string) string {
+    mut t := s
+    if s.contains('.') {
+        t = s.trim_right('0')
     }
-    return a.str_ctx(mut ctx)
+    return t.trim_suffix('.')
+}
+
+pub fn (a Bigfloat) str() string {
+    ctx := PrintContext {
+        base: 10
+        prec: 17 // like in julia and python
+        rnd: .rndn // == 0 default
+        flags: ftoa_format_fixed // == 0 default
+    }
+    return a.str_ctx(ctx)
 }
 
 // /* modulo 2^n instead of saturation. NaN and infinity return 0 */
@@ -761,6 +782,19 @@ pub fn (a Bigfloat) i64() i64 {
     return pres
 }
 
+// // Conversions from and to BigInger
+// pub fn from_biginteger(a bigint.Bigint) Bigfloat {
+//     r := Bigfloat(a)
+//     // r.prec = def_precision
+//     return r
+// }
+
+// pub fn (a Bigfloat) biginteger() bigint.Bigint {
+//     mut r := bigint.Bigint(a)
+//     r.rint()
+//     // r.prec = bf_inf_prec
+//     return r
+// }
 
 // // /* the following functions are exported for testing only. */
 // // fn C.mp_print_str(str &char, tab &u64, n u64)
@@ -777,21 +811,80 @@ pub fn (a Bigfloat) i64() i64 {
 // // fn C.mp_recip(s &C.bf_context_t, tabr &u64, taba &u64, n u64) int
 // // fn C.bf_isqrt(a u64) u64
 
-// /* transcendental functions */
-// fn C.bf_const_log2(T &bf_t, prec u64, flags u32) int
-// fn C.bf_const_pi(T &bf_t, prec u64, flags u32) int
-// fn C.bf_exp(r &bf_t, a &bf_t, prec u64, flags u32) int
-// fn C.bf_log(r &bf_t, a &bf_t, prec u64, flags u32) int
-// // #define BF_POW_JS_QUIRKS (1 << 16) /* (+/-1)^(+/-Inf) = NaN, 1^NaN = NaN */
-fn C.bf_pow(r &bf_t, x &bf_t, y &bf_t, prec u64, flags u32) int
+/* transcendental functions */
+fn C.bf_const_log2(T &C.bf_t, prec u64, flags u32) int
 
-// fn C.bf_cos(r &bf_t, a &bf_t, prec u64, flags u32) int
-// fn C.bf_sin(r &bf_t, a &bf_t, prec u64, flags u32) int
-// fn C.bf_tan(r &bf_t, a &bf_t, prec u64, flags u32) int
-// fn C.bf_atan(r &bf_t, a &bf_t, prec u64, flags u32) int
-// fn C.bf_atan2(r &bf_t, y &bf_t, x &bf_t, prec u64, flags u32) int
-// fn C.bf_asin(r &bf_t, a &bf_t, prec u64, flags u32) int
-// fn C.bf_acos(r &bf_t, a &bf_t, prec u64, flags u32) int
+pub fn const_log2(T Bigfloat, prec u64, flags u32) int {
+	return C.bf_const_log2(&T, prec, flags)
+}
+
+fn C.bf_const_pi(T &C.bf_t, prec u64, flags u32) int
+
+pub fn const_pi(T Bigfloat, prec u64, flags u32) int {
+	return C.bf_const_pi(&T, prec, flags)
+}
+
+fn C.bf_exp(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
+
+pub fn exp(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
+	return C.bf_exp(&r, &a, prec, flags)
+}
+
+fn C.bf_log(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
+
+pub fn log(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
+	return C.bf_log(&r, &a, prec, flags)
+}
+
+// #define BF_POW_JS_QUIRKS (1 << 16) /* (+/-1)^(+/-Inf) = NaN, 1^NaN = NaN */
+fn C.bf_pow(r &C.bf_t, x &C.bf_t, y &C.bf_t, prec u64, flags u32) int
+
+pub fn pow(r Bigfloat, x Bigfloat, y Bigfloat, prec u64, flags u32) int {
+	return C.bf_pow(&r, &x, &y, prec, flags)
+}
+
+fn C.bf_cos(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
+
+pub fn cos(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
+	return C.bf_cos(&r, &a, prec, flags)
+}
+
+fn C.bf_sin(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
+
+pub fn sin(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
+	return C.bf_sin(&r, &a, prec, flags)
+}
+
+fn C.bf_tan(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
+
+pub fn tan(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
+	return C.bf_tan(&r, &a, prec, flags)
+}
+
+fn C.bf_atan(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
+
+pub fn atan(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
+	return C.bf_atan(&r, &a, prec, flags)
+}
+
+fn C.bf_atan2(r &C.bf_t, y &C.bf_t, x &C.bf_t, prec u64, flags u32) int
+
+pub fn atan2(r Bigfloat, y Bigfloat, x Bigfloat, prec u64, flags u32) int {
+	return C.bf_atan2(&r, &x, &x, prec, flags)
+}
+
+fn C.bf_asin(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
+
+pub fn asin(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
+	return C.bf_asin(&r, &a, prec, flags)
+}
+
+fn C.bf_acos(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
+
+pub fn acos(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
+	return C.bf_acos(&r, &a, prec, flags)
+}
+
 
 // /* decimal floating point */
 
