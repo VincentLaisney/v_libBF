@@ -44,12 +44,29 @@ fn test_from_f64() {
 }
 
 fn test_from_str() {
-	assert big.from_str('9870123').str() == '9870123'
-	assert big.from_str('').str() == '0'
-	assert big.from_str('0').str() == '0'
-	assert big.from_str('1').str() == '1'
-	assert big.from_str('456.112').str() == '456'
-	mut a := big.from_str('9383.75')
+	mut a := big.from_str('9870123') or {panic('error1')}
+	assert a.str() == '9870123'
+	if x := big.from_str('') {
+		println(x.str())
+		assert false
+	} else {
+		assert true
+	}
+	if x := big.from_str('not a number') {
+		println(x.str())
+		assert false
+	} else {
+		assert true
+	}
+	a = big.from_str('0') or {panic('error1')}
+	assert a.str() == '0'
+	a = big.from_str('1') or {panic('error1')}
+	assert a.str() == '1'
+	a = big.from_str('456.112') or {panic('error1')}
+	assert big.get_bf_retval() == big.bf_st_inexact // test if the string doesn't represent an integer
+	assert a.str() == '456'
+	a = big.from_str('9383.75') or {panic('error1')}
+	assert big.get_bf_retval() == big.bf_st_inexact
 	assert a.str_base(10) == '9384' // for testing the rounding
 	assert a.str_base(16) == '24a8' // for testing the rounding of the internal value
 	a.mul_2exp(8)					// and not only the display
@@ -57,24 +74,30 @@ fn test_from_str() {
 
 	for i := 1; i < 307; i += 61 {
 		input := '9'.repeat(i)
-		out := big.from_str(input).str()
+		out := big.from_str(input) or {panic('error2')}
+		out_str := out.str()
 		// eprintln('>> i: $i input: $input.str()')
 		// eprintln('>> i: $i   out: $out.str()')
-		assert input == out
+		assert input == out_str
 	}
 }
 
-fn test_from_hex_str() {
+fn test_from_str_base() {
 	// use base 0 to interpret 0x, 0b and 0 for hexa, binary and octal
-	assert big.from_str_base('0x123', 0).str_base (16) == '123'
-	assert big.from_str_base('0b110011', 0).str_base (2) == '110011'
-	assert big.from_str_base('0123', 0).str_base (8) == '123'
+	mut a := big.from_str_base('0x123', 0) or {panic('error2')}
+	assert a.str_base (16) == '123'
+	a = big.from_str_base('0b110011', 0) or {panic('error2')}
+	assert a.str_base (2) == '110011'
+	a = big.from_str_base('0123', 0) or {panic('error2')}
+	assert a.str_base (8) == '123'
 	for i in 1 .. 33 {
 		input := 'e'.repeat(i)
-		out := big.from_str_base(input, 16).str_base (16)
-		assert input == out
+		out := big.from_str_base(input, 16) or {panic('error2')}
+		out_str := out.str_base (16)
+		assert input == out_str
 	}
-	assert big.from_str('0').str_base (16) == '0'
+	a = big.from_str('0') or {panic('')}
+	assert a.str_base (16) == '0'
 }
 
 fn test_str() {
@@ -85,7 +108,8 @@ fn test_str() {
 	assert big.from_u64(4398046511104).str() == '4398046511104'
 	// assert big.from_i64(int(4294967295)).str() == '18446744073709551615'
 	// assert big.from_i64(-1).str() == '18446744073709551615'
-	assert big.from_str_base('e'.repeat(80), 16).str() == '1993587900192849410235353592424915306962524220866209251950572167300738410728597846688097947807470'
+	a := big.from_str_base('e'.repeat(80), 16) or {panic('')}
+	assert a.str() == '1993587900192849410235353592424915306962524220866209251950572167300738410728597846688097947807470'
 }
 
 fn test_plus() {
@@ -101,35 +125,35 @@ fn test_plus() {
 	a.dec()
 	a.dec()
 	assert a.str_base (16) == '4'
-	a = big.from_str('8337839423')
-	b = big.from_str('9683495887')
+	a = big.from_str('8337839423') or {panic('')}
+	b = big.from_str('9683495887') or {panic('')}
 	assert '${b + a}' == '18021335310'
 	assert big.get_bf_retval() == 0
-	a = big.from_str('-8337839423')
-	b = big.from_str('9683495887')
+	a = big.from_str('-8337839423') or {panic('')}
+	b = big.from_str('9683495887') or {panic('')}
 	assert '${b + a}' == '1345656464'
 	assert big.get_bf_retval() == 0
-	a = big.from_str('8337839423')
-	b = big.from_str('-9683495887')
+	a = big.from_str('8337839423') or {panic('')}
+	b = big.from_str('-9683495887') or {panic('')}
 	assert '${b + a}' == '-1345656464'
 	assert big.get_bf_retval() == 0
-	a = big.from_str('-8337839423')
-	b = big.from_str('-9683495887')
+	a = big.from_str('-8337839423') or {panic('')}
+	b = big.from_str('-9683495887') or {panic('')}
 	assert '${b + a}' == '-18021335310'
 	assert big.get_bf_retval() == 0
-	a = big.from_str('-8337839423')
-	b = big.from_str('8337839423')
+	a = big.from_str('-8337839423') or {panic('')}
+	b = big.from_str('8337839423') or {panic('')}
 	assert '${b + a}' == '0'
 	assert big.get_bf_retval() == 0
-	a = big.from_str('8337839423')
-	b = big.from_str('-8337839423')
+	a = big.from_str('8337839423') or {panic('')}
+	b = big.from_str('-8337839423') or {panic('')}
 	assert '${b + a}' == '0'
 	assert big.get_bf_retval() == 0
 }
 
 fn test_add() {
-	a := big.from_str('833783942383378394238337839423')
-	b := big.from_str('968349588796834958879683495887')
+	a := big.from_str('833783942383378394238337839423') or {panic('')}
+	b := big.from_str('968349588796834958879683495887') or {panic('')}
 	assert '${b + a}' == '1802133531180213353118021335310'
 	mut ctx := big.get_def_ctx()
 	ctx.prec = 40
@@ -156,31 +180,31 @@ fn test_minus() {
 	assert ee.str_base (16) == '0'
 	b -= a
 	assert b.str_base (16) == '1'
-	a = big.from_str('8337839423')
-	b = big.from_str('9683495887')
+	a = big.from_str('8337839423') or {panic('')}
+	b = big.from_str('9683495887') or {panic('')}
 	assert '${b - a}' == '1345656464'
 	assert '${a - b}' == '-1345656464'
-	a = big.from_str('-8337839423')
-	b = big.from_str('-9683495887')
+	a = big.from_str('-8337839423') or {panic('')}
+	b = big.from_str('-9683495887') or {panic('')}
 	assert '${b - a}' == '-1345656464'
 	assert '${a - b}' == '1345656464'
-	a = big.from_str('-8337839423')
-	b = big.from_str('9683495887')
+	a = big.from_str('-8337839423') or {panic('')}
+	b = big.from_str('9683495887') or {panic('')}
 	assert '${b - a}' == '18021335310'
 	assert '${a - b}' == '-18021335310'
-	a = big.from_str('-8337839423')
-	b = big.from_str('-8337839423')
+	a = big.from_str('-8337839423') or {panic('')}
+	b = big.from_str('-8337839423') or {panic('')}
 	assert '${b - a}' == '0'
 	assert '${a - b}' == '0'
-	a = big.from_str('8337839423')
-	b = big.from_str('8337839423')
+	a = big.from_str('8337839423') or {panic('')}
+	b = big.from_str('8337839423') or {panic('')}
 	assert '${b - a}' == '0'
 	assert '${a - b}' == '0'
 }
 
 fn test_sub() {
-	a := big.from_str('833783942383378394238337839423')
-	b := big.from_str('968349588796834958879683495887')
+	a := big.from_str('833783942383378394238337839423') or {panic('')}
+	b := big.from_str('968349588796834958879683495887') or {panic('')}
 	assert '${b - a}' == '134565646413456564641345656464'
 	mut ctx := big.get_def_ctx()
 	ctx.prec = 40
@@ -210,18 +234,18 @@ fn test_multiply() {
 	assert d.str_base (16) == '60000000000000000000c00000000000000000018'
 	a *= b
 	assert a.str_base (16) == '6'
-	a = big.from_str('12345678901234567890')
-	b = big.from_str('98765432109876543210')
+	a = big.from_str('12345678901234567890') or {panic('')}
+	b = big.from_str('98765432109876543210') or {panic('')}
 	assert '${a * b}' == '1219326311370217952237463801111263526900'
-	a = big.from_str('12345678901234567890')
-	b = big.from_str('281474976710656')
+	a = big.from_str('12345678901234567890') or {panic('')}
+	b = big.from_str('281474976710656') or {panic('')}
 	assert '${a * b}' == '3474999681202237152443873718435840'
-	a = big.from_str('12345678901234567890')
+	a = big.from_str('12345678901234567890') or {panic('')}
 	a.mul_2exp(48)
 	assert '${a}' == '3474999681202237152443873718435840'
-	a = big.from_str('12345678901234567890')
+	a = big.from_str('12345678901234567890') or {panic('')}
 	a.mul_2exp(2) // lshift(2)
-	b = big.from_str('281474976710656')
+	b = big.from_str('281474976710656') or {panic('')}
 	b.mul_2exp(4)
 	assert '${a * b}' == '222399979596943177756407917979893760'
 }
@@ -239,12 +263,12 @@ fn test_divide() {
 	assert (e / (a * a)).str_base (16) == '100'
 	b /= a
 	assert b.str_base (16) == '1'
-	a = big.from_str('12345678901234567890')
-	b = big.from_str('281474976710656')
+	a = big.from_str('12345678901234567890') or {panic('')}
+	b = big.from_str('281474976710656') or {panic('')}
 	mut ctx := big.get_def_ctx()
 	ctx.rnd = .rndz
 	assert '${a.div_ctx(b, ctx)}' == '43860'
-	a = big.from_str('12345678901234567890')
+	a = big.from_str('12345678901234567890') or {panic('')}
 	a.mul_2exp_ctx(-48, ctx)
 	assert '${a}' == '43860'
 }
@@ -268,8 +292,8 @@ fn test_divrem() {
 }
 
 fn test_divide_mod_big() {
-	a := big.from_str('987654312345678901234567890')
-	b := big.from_str('98765432109876543210')
+	a := big.from_str('987654312345678901234567890') or {panic('')}
+	b := big.from_str('98765432109876543210') or {panic('')}
 
 	assert '${a / b}' == '9999999'
 	assert '${a % b}' == '90012345579011111100'
@@ -381,7 +405,7 @@ fn test_negative_pow() {
 
 fn test_tests() {
 	a := big.from_i64(0)
-	b := big.from_str('748483938485767849392011988460')
+	b := big.from_str('748483938485767849392011988460') or {panic('error4')}
 	assert a.is_zero()
 	assert a.is_finite()
 	assert ! b.is_zero()

@@ -642,16 +642,20 @@ pub const atof_exponent =        (1 << 19)
    exponent */
 fn C.bf_atof2(r &C.bf_t, pexponent &i64, str &char, pnext &&char, radix int, prec u64, flags u32) int
 
-pub fn from_str_base(str string, radix int) Bigint {
+pub fn from_str_base(str string, radix int) ?Bigint {
     mut r := new()
     pexponent := i64(0) 
     retval := C.bf_atof2(&r, &pexponent, str.str, voidptr(0), radix, prec_inf, atof_bin_oct)
     set_bf_retval(retval)
     r.rint() // for Bigint
-    return r
+    if r.is_nan() || ! r.is_finite() {
+        return error('Invalid string')
+    } else {
+        return r
+    }
 }
 
-pub fn from_str(str string) Bigint {
+pub fn from_str(str string) ?Bigint {
     return from_str_base(str, 10)
 }
 // fn C.bf_mul_pow_radix(r &bf_t, T &bf_t, radix u64, expn i64, prec u64, flags u32) int
