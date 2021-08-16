@@ -13,6 +13,14 @@ This last routine get a 10-base representation. For the original bf_ftoa() there
 
 The operators + - * / % have been overloaded.
 
+The imports are:
+`import libbf.big.integer`
+or
+`import libbf.big.float`
+
+### Bigfloat ###
+The Bigfloats are available through a distinct module. See the README in the big/float folder.
+
 ### Installation ###
 The libbf is part of the distribution and has been patched.
 
@@ -35,4 +43,4 @@ LibBF is under the [MIT-license](https://mit-license.org/)
 V_gmp is under the [MIT-license](https://raw.githubusercontent.com/VincentLaisney/v_gmp/main/LICENSE).
 
 ### To do ###
-Porting of Float and Decimal part of LibBF
+Porting of Decimal part of LibBF
