@@ -138,7 +138,7 @@ pub mut:
 
 pub const def_precision = u64(32 * 32) // 1024 bits, about 300 digits
 
-pub fn get_def_ctx () MathContext {
+pub fn get_def_math_ctx () MathContext {
     return MathContext {
         prec: def_precision
         rnd:  .rndn // rounding to the nearest (as in julia)
@@ -361,7 +361,7 @@ pub fn set(mut r Bigfloat, a Bigfloat) int {
 fn C.bf_get_float64(a &C.bf_t, pres &f64, rnd_mode Round) int
 
 pub fn (a Bigfloat) f64() f64 {
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
     pres := f64(0.0)
 	retval := C.bf_get_float64(&a, &pres, ctx.rnd)
     set_bf_retval(retval)
@@ -404,7 +404,7 @@ fn C.bf_add(r &C.bf_t, a &C.bf_t, b &C.bf_t, prec u64, flags u32) int
 
 pub fn (a Bigfloat) + (b Bigfloat) Bigfloat {
     r := new()
-    ctx := get_def_ctx ()
+    ctx := get_def_math_ctx ()
 	retval := C.bf_add(&r, &a, &b, ctx.prec, ctx.flags)
     set_bf_retval(retval)
     return r
@@ -421,7 +421,7 @@ fn C.bf_sub(r &C.bf_t, a &C.bf_t, b &C.bf_t, prec u64, flags u32) int
 
 pub fn (a Bigfloat) - (b Bigfloat) Bigfloat {
     r := new()
-    ctx := get_def_ctx ()
+    ctx := get_def_math_ctx ()
 	retval := C.bf_sub(&r, &a, &b, ctx.prec, ctx.flags)
     set_bf_retval(retval)
     return r
@@ -444,7 +444,7 @@ pub fn (a Bigfloat) add_i64_ctx(b1 i64, ctx MathContext) Bigfloat {
 }
 
 pub fn (a Bigfloat) add_i64(b1 i64) Bigfloat {
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
     return a.add_i64_ctx(b1, ctx)
 }
 
@@ -464,7 +464,7 @@ fn C.bf_mul(r &C.bf_t, a &C.bf_t, b &C.bf_t, prec u64, flags u32) int
 
 pub fn (a Bigfloat) * (b Bigfloat) Bigfloat {
 	mut r := new()
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
     retval := C.bf_mul(&r, &a, &b, ctx.prec, ctx.flags)
     set_bf_retval(retval)
     return r
@@ -472,20 +472,42 @@ pub fn (a Bigfloat) * (b Bigfloat) Bigfloat {
 
 fn C.bf_mul_ui(r &C.bf_t, a &C.bf_t, b1 u64, prec u64, flags u32) int
 
-pub fn mul_u64(mut r Bigfloat, a Bigfloat, b1 u64, prec u64, flags u32) int {
-	return C.bf_mul_ui(&r, &a, b1, prec, flags)
+pub fn mul_u64_ctx(a Bigfloat, b1 u64, ctx MathContext) Bigfloat {
+	r := new()
+	retval := C.bf_mul_ui(&r, &a, b1, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
+}
+
+pub fn mul_u64(a Bigfloat, b1 u64) Bigfloat {
+	r := new()
+	ctx := get_def_math_ctx()
+	retval := C.bf_mul_ui(&r, &a, b1, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
 }
 
 fn C.bf_mul_si(r &C.bf_t, a &C.bf_t, b1 i64, prec u64, flags u32) int
 
-pub fn mul_i64(mut r Bigfloat, a Bigfloat, b1 i64, prec u64, flags u32) int {
-	return C.bf_mul_si(&r, &a, b1, prec, flags)
+pub fn mul_i64_ctx(a Bigfloat, b1 i64, ctx MathContext) Bigfloat {
+	r := new()
+	retval := C.bf_mul_si(&r, &a, b1, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
+}
+
+pub fn mul_i64(a Bigfloat, b1 i64) Bigfloat {
+	r := new()
+	ctx := get_def_math_ctx()
+	retval := C.bf_mul_si(&r, &a, b1, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
 }
 
 fn C.bf_mul_2exp(r &C.bf_t, e i64, prec u64, flags u32) int
 
 pub fn (mut r Bigfloat) mul_2exp(e i64) {
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
 	retval := C.bf_mul_2exp(&r, e , ctx.prec , ctx.flags | u32(ctx.rnd))
     set_bf_retval(retval)
 }
@@ -499,7 +521,7 @@ fn C.bf_div(r &C.bf_t, a &C.bf_t, b &C.bf_t, prec u64, flags u32) int
 
 pub fn (a Bigfloat) / (b Bigfloat) Bigfloat {
     r := new()
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
 	retval := C.bf_div(&r, &a, &b, ctx.prec, ctx.flags)
     set_bf_retval(retval)
     return r
@@ -511,7 +533,7 @@ fn C.bf_divrem(q &C.bf_t, r &C.bf_t, a &C.bf_t, b &C.bf_t, prec u64, flags u32, 
 pub fn divrem(a Bigfloat, b Bigfloat) (Bigfloat, Bigfloat) {
     q := new()
     r := new()
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
 	retval := C.bf_divrem(&q, &r, &a, &b, ctx.prec, ctx.flags, ctx.rnd)
     set_bf_retval(retval)
     return q, r
@@ -533,7 +555,7 @@ pub fn (a Bigfloat) div_ctx(b Bigfloat, ctx MathContext) Bigfloat {
 
 // pub fn (a Bigfloat) / (b Bigfloat) Bigfloat {
 //     mut q := new()
-//     mut ctx := get_def_ctx()
+//     mut ctx := get_def_math_ctx()
 //     ret_val = C.div(mut q, a, b, ctx.prec, ctx.flags, ctx.rnd)
 //     return q
 // }
@@ -548,21 +570,26 @@ pub fn (a Bigfloat) rem_ctx(b Bigfloat, ctx MathContext) Bigfloat {
 }
 
 pub fn (a Bigfloat) % (b Bigfloat) Bigfloat {
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
     return a.rem_ctx(b, ctx)
 }
 
 fn C.bf_remquo(pq &i64, r &C.bf_t, a &C.bf_t, b &C.bf_t, prec u64, flags u32, rnd_mode int) int
 
-pub fn remquo(pq &i64, mut r Bigfloat, a Bigfloat, b Bigfloat, prec u64, flags u32, rnd_mode int) int {
-	return C.bf_remquo(pq, &r, &a, &b, prec, flags, rnd_mode)
+pub fn remquo_ctx(pq &i64, mut r Bigfloat, a Bigfloat, b Bigfloat, ctx MathContext) int {
+	return C.bf_remquo(pq, &r, &a, &b, ctx.prec, ctx.flags, int(ctx.rnd))
+}
+
+pub fn remquo(pq &i64, mut r Bigfloat, a Bigfloat, b Bigfloat) int {
+	ctx := get_def_math_ctx()
+	return C.bf_remquo(pq, &r, &a, &b, ctx.prec, ctx.flags, int(ctx.rnd))
 }
 
 /* round to integer with infinite precision */
 fn C.bf_rint(r &C.bf_t, rnd_mode Round) int
 
 pub fn (mut r Bigfloat) rint() {
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
 	retval := C.bf_rint(&r, ctx.rnd)
     set_bf_retval(retval)
 }
@@ -574,8 +601,16 @@ pub fn (mut r Bigfloat) rint_ctx(ctx MathContext) {
 
 fn C.bf_round(r &C.bf_t, prec u64, flags u32) int
 
-pub fn round(mut r Bigfloat, prec u64, flags u32) int {
-	return C.bf_round(&r, prec, flags)
+pub fn round_ctx(ctx MathContext) Bigfloat {
+	r := new()
+	retval := C.bf_round(&r, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
+}
+
+pub fn round(mut r Bigfloat) int {
+	ctx := get_def_math_ctx()
+	return C.bf_round(&r, ctx.prec, ctx.flags)
 }
 
 fn C.bf_sqrtrem(r &C.bf_t, rem1 &C.bf_t, a &C.bf_t) int
@@ -592,7 +627,7 @@ fn C.bf_sqrt(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
 
 pub fn sqrt(a Bigfloat) Bigfloat {
 	r := new()
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
     retval := C.bf_sqrt(&r, &a, ctx.prec, ctx.flags)
     set_bf_retval(retval)
     return r
@@ -606,20 +641,29 @@ pub fn get_exp_min(a Bigfloat) i64 {
 
 fn C.bf_logic_or(r &C.bf_t, a &C.bf_t, b &C.bf_t) int
 
-pub fn logic_or(mut r Bigfloat, a Bigfloat, b Bigfloat) int {
-	return C.bf_logic_or(&r, &a, &b)
+pub fn logic_or(a Bigfloat, b Bigfloat) Bigfloat {
+	r := new()
+	retval := C.bf_logic_or(&r, &a, &b)
+	set_bf_retval(retval)
+	return r
 }
 
 fn C.bf_logic_xor(r &C.bf_t, a &C.bf_t, b &C.bf_t) int
 
-pub fn logic_xor(mut r Bigfloat, a Bigfloat, b Bigfloat) int {
-	return C.bf_logic_xor(&r, &a, &b)
+pub fn logic_xor(a Bigfloat, b Bigfloat) Bigfloat {
+	r := new()
+	retval := C.bf_logic_xor(&r, &a, &b)
+	set_bf_retval(retval)
+	return r
 }
 
 fn C.bf_logic_and(r &C.bf_t, a &C.bf_t, b &C.bf_t) int
 
-pub fn logic_and(mut r Bigfloat, a Bigfloat, b Bigfloat) int {
-	return C.bf_logic_and(&r, &a, &b)
+pub fn logic_and(a Bigfloat, b Bigfloat) Bigfloat {
+	r := new()
+	retval := C.bf_logic_and(&r, &a, &b)
+	set_bf_retval(retval)
+	return r
 }
 
 
@@ -642,6 +686,15 @@ pub mut:
     dont_trim   bool
 }
 
+pub fn get_def_print_ctx() PrintContext {
+    return PrintContext {
+        base: 10
+        prec: 17 // like in julia and python
+        rnd: .rndn // == 0 default
+        flags: ftoa_format_fixed // == 0 default
+    }
+}
+
 pub struct AtofContext {
 pub mut:
     base        int
@@ -649,6 +702,18 @@ pub mut:
     flags       u32
     rnd         Round
     accept_nan  bool
+    accept_inf  bool
+}
+
+pub fn get_def_atof_ctx() AtofContext {
+    return AtofContext {
+        base: 10
+        prec: def_precision
+        flags: 0
+        rnd: .rndn
+        accept_nan: false // with true any string is accepted
+        accept_inf: true
+    }
 }
 
 fn C.bf_atof(a &C.bf_t, str &char, pnext &&char, radix int, prec u64, flags u32) int 
@@ -664,25 +729,21 @@ fn C.bf_atof(a &C.bf_t, str &char, pnext &&char, radix int, prec u64, flags u32)
 pub fn from_str_ctx(str string, ctx AtofContext) ?Bigfloat {
     r := new()
     retval := C.bf_atof(&r, str.str, voidptr(0), ctx.base, ctx.prec, ctx.flags)
-    if retval != 0 {
-        return error('$retval')
-    }
     set_bf_retval(retval)
-    if r.is_nan() {
+    if ! ctx.accept_nan && r.is_nan() {
+        return error('NaN: invalid string')
+    }
+    if ! ctx.accept_inf && ! r.is_finite() {
         return error('NaN: invalid string')
     }
     return r
 }
 
 pub fn from_str(str string) ?Bigfloat {
-    mut ctx := AtofContext {
-        base: 10
-        prec: def_precision
-        flags: 0
-    }
+    ctx := get_def_atof_ctx()
     return from_str_ctx(str, ctx)
 }
-// fn C.bf_mul_pow_radix(r &bf_t, T &bf_t, radix u64, expn i64, prec u64, flags u32) int
+// fn C.bf_mul_pow_radix(r &bf_t, t &bf_t, radix u64, expn i64, prec u64, flags u32) int
 
 
 // // /* Conversion of floating point number to string. Return a null
@@ -751,12 +812,7 @@ fn trim_zeros(s string) string {
 }
 
 pub fn (a Bigfloat) str() string {
-    ctx := PrintContext {
-        base: 10
-        prec: 17 // like in julia and python
-        rnd: .rndn // == 0 default
-        flags: ftoa_format_fixed // == 0 default
-    }
+    ctx := get_def_print_ctx()
     return a.str_ctx(ctx)
 }
 
@@ -766,7 +822,7 @@ fn C.bf_get_int32(pres &int, a &C.bf_t, flags int) int
 
 pub fn (a Bigfloat) int() int {
     pres := int(0)
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
 	retval := C.bf_get_int32(&pres, &a, ctx.flags)
     set_bf_retval(retval)
     return pres
@@ -776,7 +832,7 @@ fn C.bf_get_int64(pres &i64, a &C.bf_t, flags int) int
 
 pub fn (a Bigfloat) i64() i64 {
     pres := i64(0)
-    ctx := get_def_ctx()
+    ctx := get_def_math_ctx()
 	retval := C.bf_get_int64(&pres, &a, ctx.flags)
     set_bf_retval(retval)
     return pres
@@ -812,77 +868,209 @@ pub fn (a Bigfloat) i64() i64 {
 // // fn C.bf_isqrt(a u64) u64
 
 /* transcendental functions */
-fn C.bf_const_log2(T &C.bf_t, prec u64, flags u32) int
+fn C.bf_const_log2(t &C.bf_t, prec u64, flags u32) int
 
-pub fn const_log2(T Bigfloat, prec u64, flags u32) int {
-	return C.bf_const_log2(&T, prec, flags)
+pub fn log2_ctx(ctx MathContext) Bigfloat {
+	t := new()
+	retval := C.bf_const_log2(&t, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return t
 }
 
-fn C.bf_const_pi(T &C.bf_t, prec u64, flags u32) int
+pub fn log2() Bigfloat {
+	t := new()
+	ctx := get_def_math_ctx()
+	retval := C.bf_const_log2(&t, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return t
+}
 
-pub fn const_pi(T Bigfloat, prec u64, flags u32) int {
-	return C.bf_const_pi(&T, prec, flags)
+fn C.bf_const_pi(t &C.bf_t, prec u64, flags u32) int
+
+pub fn pi_ctx(ctx MathContext) Bigfloat {
+	t := new()
+	retval := C.bf_const_pi(&t, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return t
+}
+
+pub fn pi() Bigfloat {
+	t := new()
+	ctx := get_def_math_ctx()
+	retval := C.bf_const_pi(&t, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return t
 }
 
 fn C.bf_exp(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
 
-pub fn exp(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
-	return C.bf_exp(&r, &a, prec, flags)
+pub fn exp_ctx(a Bigfloat, ctx MathContext) Bigfloat {
+	r := new()
+	retval := C.bf_exp(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
+}
+
+pub fn exp(a Bigfloat) Bigfloat {
+	r := new()
+	ctx := get_def_math_ctx()
+	retval := C.bf_exp(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
 }
 
 fn C.bf_log(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
 
-pub fn log(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
-	return C.bf_log(&r, &a, prec, flags)
+pub fn log_ctx(a Bigfloat, ctx MathContext) Bigfloat {
+	r := new()
+	retval := C.bf_log(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
+}
+
+pub fn log(a Bigfloat) Bigfloat {
+	r := new()
+	ctx := get_def_math_ctx()
+	retval := C.bf_log(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
 }
 
 // #define BF_POW_JS_QUIRKS (1 << 16) /* (+/-1)^(+/-Inf) = NaN, 1^NaN = NaN */
 fn C.bf_pow(r &C.bf_t, x &C.bf_t, y &C.bf_t, prec u64, flags u32) int
 
-pub fn pow(r Bigfloat, x Bigfloat, y Bigfloat, prec u64, flags u32) int {
-	return C.bf_pow(&r, &x, &y, prec, flags)
+pub fn pow_ctx(x Bigfloat, y Bigfloat, ctx MathContext) Bigfloat {
+	r := new()
+	retval := C.bf_pow(&r, &x, &y, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
+}
+
+pub fn pow(x Bigfloat, y Bigfloat) Bigfloat {
+	r := new()
+	ctx := get_def_math_ctx()
+	retval := C.bf_pow(&r, &x, &y, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
 }
 
 fn C.bf_cos(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
 
-pub fn cos(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
-	return C.bf_cos(&r, &a, prec, flags)
+pub fn cos_ctx(a Bigfloat, ctx MathContext) Bigfloat {
+	r := new()
+	retval := C.bf_cos(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
+}
+
+pub fn cos(a Bigfloat) Bigfloat {
+	r := new()
+	ctx := get_def_math_ctx()
+	retval := C.bf_cos(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
 }
 
 fn C.bf_sin(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
 
-pub fn sin(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
-	return C.bf_sin(&r, &a, prec, flags)
+pub fn sin_ctx(a Bigfloat, ctx MathContext) Bigfloat {
+	r := new()
+	retval := C.bf_sin(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
+}
+
+pub fn sin(a Bigfloat) Bigfloat {
+	r := new()
+	ctx := get_def_math_ctx()
+	retval := C.bf_sin(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
 }
 
 fn C.bf_tan(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
 
-pub fn tan(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
-	return C.bf_tan(&r, &a, prec, flags)
+pub fn tan_ctx(a Bigfloat, ctx MathContext) Bigfloat {
+	r := new()
+	retval := C.bf_tan(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
+}
+
+pub fn tan(a Bigfloat) Bigfloat {
+	r := new()
+	ctx := get_def_math_ctx()
+	retval := C.bf_tan(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
 }
 
 fn C.bf_atan(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
 
-pub fn atan(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
-	return C.bf_atan(&r, &a, prec, flags)
+pub fn atan_ctx(a Bigfloat, ctx MathContext) Bigfloat {
+	r := new()
+	retval := C.bf_atan(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
+}
+
+pub fn atan(a Bigfloat) Bigfloat {
+	r := new()
+	ctx := get_def_math_ctx()
+	retval := C.bf_atan(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
 }
 
 fn C.bf_atan2(r &C.bf_t, y &C.bf_t, x &C.bf_t, prec u64, flags u32) int
 
-pub fn atan2(r Bigfloat, y Bigfloat, x Bigfloat, prec u64, flags u32) int {
-	return C.bf_atan2(&r, &x, &x, prec, flags)
+pub fn atan2_ctx(y Bigfloat, x Bigfloat, ctx MathContext) Bigfloat {
+	r := new()
+	retval := C.bf_atan2(&r, &x, &x, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
+}
+
+pub fn atan2(y Bigfloat, x Bigfloat) Bigfloat {
+	r := new()
+	ctx := get_def_math_ctx()
+	retval := C.bf_atan2(&r, &x, &x, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
 }
 
 fn C.bf_asin(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
 
-pub fn asin(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
-	return C.bf_asin(&r, &a, prec, flags)
+pub fn asin_ctx(a Bigfloat, ctx MathContext) Bigfloat {
+	r := new()
+	retval := C.bf_asin(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
+}
+
+pub fn asin(a Bigfloat) Bigfloat {
+	r := new()
+	ctx := get_def_math_ctx()
+	retval := C.bf_asin(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
 }
 
 fn C.bf_acos(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
 
-pub fn acos(r Bigfloat, a Bigfloat, prec u64, flags u32) int {
-	return C.bf_acos(&r, &a, prec, flags)
+pub fn acos_ctx(a Bigfloat, ctx MathContext) Bigfloat {
+	r := new()
+	retval := C.bf_acos(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
+}
+
+pub fn acos(a Bigfloat) Bigfloat {
+	r := new()
+	ctx := get_def_math_ctx()
+	retval := C.bf_acos(&r, &a, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return r
 }
 
 
