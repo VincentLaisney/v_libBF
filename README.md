@@ -19,7 +19,7 @@ or
 `import libbf.big.float`
 
 ### Bigfloat ###
-The Bigfloats are available through a distinct module. See the README in the big/float folder.
+The Bigfloats are available through a distinct module. See the [README](https://github.com/VincentLaisney/v_libBF/tree/main/big/float) in the big/float folder.
 
 ### Installation ###
 The libbf is part of the distribution and has been patched.

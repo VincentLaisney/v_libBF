@@ -1,6 +1,6 @@
 # LibFloat
 
-The routines of the libBF library have been adapted to the V philosophy. The conversion routines from string return an option Bigfloat (?Bigfloat). Many of the functions return a Bigfloat instead of taking a `mut Bigfloat` parameter.
+The routines of the libBF library have been adapted to the V philosophy. The conversion routines from string return an option Bigfloat (`?Bigfloat`). Many of the functions return a Bigfloat instead of taking a `mut Bigfloat` parameter.
 
 ## The Contexts ##
 To control the operations of the functions Fabrice Bellard put generaly three parameters: precision, rounding and flags.

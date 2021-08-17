@@ -527,6 +527,13 @@ pub fn (a Bigfloat) / (b Bigfloat) Bigfloat {
     return r
 }
 
+pub fn div_ctx(a Bigfloat, b Bigfloat, ctx MathContext) Bigfloat {
+    r := new()
+    retval := C.bf_div(&r, &a, &b, ctx.prec, ctx.flags)
+    set_bf_retval(retval)
+    return r
+}
+
 pub const divrem_euclidian =  Round.rndf
 fn C.bf_divrem(q &C.bf_t, r &C.bf_t, a &C.bf_t, b &C.bf_t, prec u64, flags u32, rnd_mode Round) int
 
@@ -545,11 +552,6 @@ pub fn divrem_ctx(a Bigfloat, b Bigfloat, ctx MathContext) (Bigfloat, Bigfloat) 
 	retval := C.bf_divrem(&q, &r, &a, &b, ctx.prec, ctx.flags, ctx.rnd)
     set_bf_retval(retval)
     return q, r
-}
-
-pub fn (a Bigfloat) div_ctx(b Bigfloat, ctx MathContext) Bigfloat {
-    q, _ := divrem_ctx(a, b, ctx)
-    return q
 }
 
 
@@ -613,21 +615,28 @@ pub fn round(mut r Bigfloat) int {
 	return C.bf_round(&r, ctx.prec, ctx.flags)
 }
 
-fn C.bf_sqrtrem(r &C.bf_t, rem1 &C.bf_t, a &C.bf_t) int
+// fn C.bf_sqrtrem(r &C.bf_t, rem1 &C.bf_t, a &C.bf_t) int
 
-pub fn sqrtrem(a Bigfloat) (Bigfloat, Bigfloat) {
-    r := new()
-    rem1 := new()
-	retval := C.bf_sqrtrem(&r, &rem1, &a)
-    set_bf_retval(retval)
-    return r, rem1
-}
+// pub fn sqrtrem(a Bigfloat) (Bigfloat, Bigfloat) {
+//     r := new()
+//     rem1 := new()
+// 	retval := C.bf_sqrtrem(&r, &rem1, &a)
+//     set_bf_retval(retval)
+//     return r, rem1
+// }
 
 fn C.bf_sqrt(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
 
 pub fn sqrt(a Bigfloat) Bigfloat {
 	r := new()
     ctx := get_def_math_ctx()
+    retval := C.bf_sqrt(&r, &a, ctx.prec, ctx.flags)
+    set_bf_retval(retval)
+    return r
+}
+
+pub fn sqrt_ctx(a Bigfloat, ctx MathContext) Bigfloat {
+	r := new()
     retval := C.bf_sqrt(&r, &a, ctx.prec, ctx.flags)
     set_bf_retval(retval)
     return r
@@ -1024,9 +1033,10 @@ pub fn atan(a Bigfloat) Bigfloat {
 
 fn C.bf_atan2(r &C.bf_t, y &C.bf_t, x &C.bf_t, prec u64, flags u32) int
 
+/// seems buggy. See _test file
 pub fn atan2_ctx(y Bigfloat, x Bigfloat, ctx MathContext) Bigfloat {
 	r := new()
-	retval := C.bf_atan2(&r, &x, &x, ctx.prec, ctx.flags)
+	retval := C.bf_atan2(&r, &y, &x, ctx.prec, ctx.flags)
 	set_bf_retval(retval)
 	return r
 }
@@ -1034,7 +1044,7 @@ pub fn atan2_ctx(y Bigfloat, x Bigfloat, ctx MathContext) Bigfloat {
 pub fn atan2(y Bigfloat, x Bigfloat) Bigfloat {
 	r := new()
 	ctx := get_def_math_ctx()
-	retval := C.bf_atan2(&r, &x, &x, ctx.prec, ctx.flags)
+	retval := C.bf_atan2(&r, &y, &x, ctx.prec, ctx.flags)
 	set_bf_retval(retval)
 	return r
 }
