@@ -740,10 +740,10 @@ pub fn from_str_ctx(str string, ctx AtofContext) ?Bigfloat {
     retval := C.bf_atof(&r, str.str, voidptr(0), ctx.base, ctx.prec, ctx.flags)
     set_bf_retval(retval)
     if ! ctx.accept_nan && r.is_nan() {
-        return error('NaN: invalid string')
+        return error('Invalid string')
     }
     if ! ctx.accept_inf && ! r.is_finite() {
-        return error('NaN: invalid string')
+        return error('Invalid string')
     }
     return r
 }

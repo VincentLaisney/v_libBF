@@ -140,7 +140,7 @@ pub const def_precision = u64(32 * 32) // 1024 bits, about 300 digits
 
 pub fn get_def_math_ctx () MathContext {
     return MathContext {
-        prec: def_precision
+        prec: prec_inf // for exact calcul by default
         rnd:  .rndn // rounding to the nearest (as in julia)
         flags: 0
     }
@@ -341,14 +341,14 @@ pub fn set_nan(mut r Bigdecimal) {
 
 // fn C.bf_set_zero(r &C.bf_t, is_neg int)
 
-pub fn set_zero(mut r Bigdecimal, is_neg int) {
-	C.bfdec_set_zero(&r, is_neg)
+pub fn set_zero(mut r Bigdecimal, is_neg bool) {
+	C.bfdec_set_zero(&r, int(is_neg))
 }
 
 // fn C.bf_set_inf(r &C.bf_t, is_inf int)
 
-pub fn set_inf(mut r Bigdecimal, is_inf int) {
-	C.bfdec_set_inf(&r, is_inf)
+pub fn set_inf(mut r Bigdecimal, is_neg bool) {
+	C.bfdec_set_inf(&r, int(is_neg))
 }
 
 // fn C.bf_set(r &C.bf_t, a &C.bf_t) int
@@ -688,7 +688,7 @@ pub const atof_exponent =        (1 << 19)
 
 pub struct PrintContext {
 pub mut:
-    base        int
+    // base        int
     prec        u64
     flags       u32
     rnd         Round
@@ -697,8 +697,8 @@ pub mut:
 
 pub fn get_def_print_ctx() PrintContext {
     return PrintContext {
-        base: 10
-        prec: 17 // like in julia and python
+        // base: 10
+        prec: 17
         rnd: .rndn // == 0 default
         flags: ftoa_format_fixed // == 0 default
     }
@@ -706,7 +706,7 @@ pub fn get_def_print_ctx() PrintContext {
 
 pub struct AtofContext {
 pub mut:
-    base        int
+    // base        int
     prec        u64
     flags       u32
     rnd         Round
@@ -716,12 +716,12 @@ pub mut:
 
 pub fn get_def_atof_ctx() AtofContext {
     return AtofContext {
-        base: 10
-        prec: def_precision
+        // base: 10
+        prec: prec_inf
         flags: 0
         rnd: .rndn
         accept_nan: false // with true any string is accepted
-        accept_inf: true
+        accept_inf: false
     }
 }
 
@@ -740,10 +740,10 @@ pub fn from_str_ctx(str string, ctx AtofContext) ?Bigdecimal {
     retval := C.bfdec_atof(&r, str.str, voidptr(0), ctx.prec, ctx.flags)
     set_bf_retval(retval)
     if ! ctx.accept_nan && r.is_nan() {
-        return error('NaN: invalid string')
+        return error('Invalid string')
     }
     if ! ctx.accept_inf && ! r.is_finite() {
-        return error('NaN: invalid string')
+        return error('Invalid string')
     }
     return r
 }
@@ -947,21 +947,21 @@ pub fn (a Bigdecimal) int() int {
 
 // #define BF_POW_JS_QUIRKS (1 << 16) /* (+/-1)^(+/-Inf) = NaN, 1^NaN = NaN */
 // fn C.bf_pow(r &C.bf_t, x &C.bf_t, y &C.bf_t, prec u64, flags u32) int
+// fn C.bfdec_pow_ui(r &C.bfdec_t, a &C.bfdec_t, b u64) int
 
-// pub fn pow_ctx(x Bigdecimal, y Bigdecimal, ctx MathContext) Bigdecimal {
+// pub fn pow_u64_ctx(x Bigdecimal, y Bigdecimal, ctx MathContext) Bigdecimal {
 // 	r := new()
-// 	retval := C.bfdec_pow(&r, &x, &y, ctx.prec, ctx.flags)
+// 	retval := C.bfdec_pow_ui(&r, &x, &y, ctx.prec, ctx.flags)
 // 	set_bf_retval(retval)
 // 	return r
 // }
 
-// pub fn pow(x Bigdecimal, y Bigdecimal) Bigdecimal {
-// 	r := new()
-// 	ctx := get_def_math_ctx()
-// 	retval := C.bfdec_pow(&r, &x, &y, ctx.prec, ctx.flags)
-// 	set_bf_retval(retval)
-// 	return r
-// }
+pub fn pow_u64(a Bigdecimal, b u64) Bigdecimal {
+	r := new()
+	retval := C.bfdec_pow_ui(&r, &a, b)
+	set_bf_retval(retval)
+	return r
+}
 
 // fn C.bf_cos(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
 
