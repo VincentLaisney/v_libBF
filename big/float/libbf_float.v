@@ -1033,7 +1033,6 @@ pub fn atan(a Bigfloat) Bigfloat {
 
 fn C.bf_atan2(r &C.bf_t, y &C.bf_t, x &C.bf_t, prec u64, flags u32) int
 
-/// seems buggy. See _test file
 pub fn atan2_ctx(y Bigfloat, x Bigfloat, ctx MathContext) Bigfloat {
 	r := new()
 	retval := C.bf_atan2(&r, &y, &x, ctx.prec, ctx.flags)
