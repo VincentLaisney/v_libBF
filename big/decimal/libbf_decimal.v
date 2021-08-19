@@ -279,6 +279,11 @@ pub fn new() Bigdecimal {
     return r
 }
 
+pub fn (a Bigdecimal) clone() Bigdecimal {
+    mut b := new()
+    set(mut b, a)
+    return b
+}
 
 // fn C.bf_delete(r &C.bf_t)
 
@@ -489,14 +494,14 @@ pub fn (a Bigdecimal) * (b Bigdecimal) Bigdecimal {
 
 // fn C.bf_mul_si(r &C.bf_t, a &C.bf_t, b1 i64, prec u64, flags u32) int
 
-pub fn mul_i64_ctx(a Bigdecimal, b1 i64, ctx MathContext) Bigdecimal {
+pub fn (a Bigdecimal) mul_i64_ctx(b1 i64, ctx MathContext) Bigdecimal {
 	r := new()
 	retval := C.bfdec_mul_si(&r, &a, b1, ctx.prec, ctx.flags)
 	set_bf_retval(retval)
 	return r
 }
 
-pub fn mul_i64(a Bigdecimal, b1 i64) Bigdecimal {
+pub fn (a Bigdecimal) mul_i64(b1 i64) Bigdecimal {
 	r := new()
 	ctx := get_def_math_ctx()
 	retval := C.bfdec_mul_si(&r, &a, b1, ctx.prec, ctx.flags)
@@ -522,7 +527,7 @@ pub fn mul_i64(a Bigdecimal, b1 i64) Bigdecimal {
 pub fn (a Bigdecimal) / (b Bigdecimal) Bigdecimal {
     r := new()
     ctx := get_def_math_ctx()
-	retval := C.bfdec_div(&r, &a, &b, ctx.prec, ctx.flags)
+	retval := C.bfdec_div(&r, &a, &b, def_precision, ctx.flags)
     set_bf_retval(retval)
     return r
 }
@@ -541,7 +546,7 @@ pub fn divrem(a Bigdecimal, b Bigdecimal) (Bigdecimal, Bigdecimal) {
     q := new()
     r := new()
     ctx := get_def_math_ctx()
-	retval := C.bfdec_divrem(&q, &r, &a, &b, ctx.prec, ctx.flags, ctx.rnd)
+	retval := C.bfdec_divrem(&q, &r, &a, &b, ctx.prec, ctx.flags, .rndz)
     set_bf_retval(retval)
     return q, r
 }
@@ -603,16 +608,19 @@ pub fn (mut r Bigdecimal) rint_ctx(ctx MathContext) {
 
 // fn C.bf_round(r &C.bf_t, prec u64, flags u32) int
 
-pub fn round_ctx(ctx MathContext) Bigdecimal {
-	r := new()
-	retval := C.bfdec_round(&r, ctx.prec, ctx.flags)
+pub fn round_ctx(r Bigdecimal, ctx MathContext) Bigdecimal {
+	s := r.clone()
+	retval := C.bfdec_round(&s, ctx.prec, ctx.flags)
 	set_bf_retval(retval)
-	return r
+	return s
 }
 
-pub fn round(mut r Bigdecimal) int {
+pub fn round(r Bigdecimal) Bigdecimal {
+	s := r.clone()
 	ctx := get_def_math_ctx()
-	return C.bfdec_round(&r, ctx.prec, ctx.flags)
+	retval := C.bfdec_round(&s, ctx.prec, ctx.flags)
+	set_bf_retval(retval)
+	return s
 }
 
 // fn C.bf_sqrtrem(r &C.bf_t, rem1 &C.bf_t, a &C.bf_t) int
@@ -627,10 +635,12 @@ pub fn round(mut r Bigdecimal) int {
 
 // fn C.bf_sqrt(r &C.bf_t, a &C.bf_t, prec u64, flags u32) int
 
+// sqrt: the precision cannot be infinite
+
 pub fn sqrt(a Bigdecimal) Bigdecimal {
 	r := new()
     ctx := get_def_math_ctx()
-    retval := C.bfdec_sqrt(&r, &a, ctx.prec, ctx.flags)
+    retval := C.bfdec_sqrt(&r, &a, def_precision, ctx.flags)
     set_bf_retval(retval)
     return r
 }
@@ -699,7 +709,7 @@ pub fn get_def_print_ctx() PrintContext {
     return PrintContext {
         // base: 10
         prec: 17
-        rnd: .rndn // == 0 default
+        rnd: .rndn
         flags: ftoa_format_fixed // == 0 default
     }
 }
