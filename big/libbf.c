@@ -3011,7 +3011,8 @@ static int bf_atof_internal(bf_t *r, slimb_t *pexponent,
 
     if (p == p_start) {
         ret = 0;
-        if (!radix_bits)
+        // patch Vincent Laisney for V-libbf
+        if (!radix_bits && ! is_dec)
             bf_delete(a);
         bf_set_nan(r);
         goto done;

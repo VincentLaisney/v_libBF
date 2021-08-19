@@ -275,6 +275,11 @@ pub fn new() Bigint {
     return r
 }
 
+pub fn (a Bigint) clone() Bigint {
+    mut b := new()
+    set(mut b, a)
+    return b
+}
 
 fn C.bf_delete(r &C.bf_t)
 
@@ -370,8 +375,8 @@ pub fn from_f64(d f64) Bigint {
     mut r := new() 
 	retval := C.bf_set_float64(&r, d)
     set_bf_retval(retval)
-    r.rint() // for Bigint
-return r
+    
+return rint(r) // for Bigint
 }
 
 
@@ -481,17 +486,19 @@ pub fn mul_i64(mut r Bigint, a Bigint, b1 i64, prec u64, flags u32) int {
 
 fn C.bf_mul_2exp(r &C.bf_t, e i64, prec u64, flags u32) int
 
-pub fn (mut r Bigint) mul_2exp(e i64) {
+pub fn mul_2exp(r Bigint, e i64) Bigint {
+    s := r.clone()
     ctx := get_def_math_ctx()
-	retval := C.bf_mul_2exp(&r, e , ctx.prec , ctx.flags | u32(ctx.rnd))
+	retval := C.bf_mul_2exp(&s, e , ctx.prec , ctx.flags | u32(ctx.rnd))
     set_bf_retval(retval)
-    r.rint() // for Bigint
+    return rint(s) // for Bigint
 }
 
-pub fn (mut r Bigint) mul_2exp_ctx(e i64, ctx MathContext) {
-	retval := C.bf_mul_2exp(&r, e , ctx.prec , ctx.flags | u32(ctx.rnd))
+pub fn mul_2exp_ctx(r Bigint, e i64, ctx MathContext) Bigint {
+    s := r.clone()
+	retval := C.bf_mul_2exp(&s, e , ctx.prec , ctx.flags | u32(ctx.rnd))
     set_bf_retval(retval)
-    r.rint_ctx(ctx) // for Bigint
+    return rint_ctx(s, ctx) // for Bigint
 }
 
 // fn C.bf_div(r &C.bf_t, a &C.bf_t, b &C.bf_t, prec u64, flags u32) int
@@ -555,21 +562,33 @@ pub fn remquo(pq &i64, mut r Bigint, a Bigint, b Bigint, prec u64, flags u32, rn
 /* round to integer with infinite precision */
 fn C.bf_rint(r &C.bf_t, rnd_mode Round) int
 
-pub fn (mut r Bigint) rint() {
+pub fn rint(r Bigint) Bigint {
+    s := r.clone()
     ctx := get_def_math_ctx()
-	retval := C.bf_rint(&r, ctx.rnd)
+	retval := C.bf_rint(&s, ctx.rnd)
     set_bf_retval(retval)
+    return s
 }
 
-pub fn (mut r Bigint) rint_ctx(ctx MathContext) {
-	retval := C.bf_rint(&r, ctx.rnd)
+pub fn rint_ctx(r Bigint, ctx MathContext) Bigint {
+    s := r.clone()
+	retval := C.bf_rint(&s, ctx.rnd)
     set_bf_retval(retval)
+    return s
 }
 
 fn C.bf_round(r &C.bf_t, prec u64, flags u32) int
 
-pub fn round(mut r Bigint, prec u64, flags u32) int {
-	return C.bf_round(&r, prec, flags)
+pub fn round_ctx(r Bigint, ctx MathContext) Bigint {
+    s := r.clone()
+	retval := C.bf_round(&s, ctx.prec, ctx.flags)
+    set_bf_retval(retval)
+    return r
+}
+
+pub fn round(r Bigint) Bigint {
+    ctx := get_def_math_ctx()
+	return round_ctx(r, ctx)
 }
 
 fn C.bf_sqrtrem(r &C.bf_t, rem1 &C.bf_t, a &C.bf_t) int
@@ -647,7 +666,7 @@ pub fn from_str_base(str string, radix int) ?Bigint {
     pexponent := i64(0) 
     retval := C.bf_atof2(&r, &pexponent, str.str, voidptr(0), radix, prec_inf, atof_bin_oct)
     set_bf_retval(retval)
-    r.rint() // for Bigint
+    r = rint(r) // for Bigint
     if r.is_nan() || ! r.is_finite() {
         return error('Invalid string')
     } else {

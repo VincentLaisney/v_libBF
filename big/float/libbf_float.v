@@ -279,6 +279,11 @@ pub fn new() Bigfloat {
     return r
 }
 
+pub fn (a Bigfloat) clone() Bigfloat {
+	mut b := new()
+	set(mut b, a)
+	return b
+}
 
 fn C.bf_delete(r &C.bf_t)
 
@@ -590,29 +595,33 @@ pub fn remquo(pq &i64, mut r Bigfloat, a Bigfloat, b Bigfloat) int {
 /* round to integer with infinite precision */
 fn C.bf_rint(r &C.bf_t, rnd_mode Round) int
 
-pub fn (mut r Bigfloat) rint() {
+pub fn rint(r Bigfloat) Bigfloat {
+	s := r.clone()
     ctx := get_def_math_ctx()
-	retval := C.bf_rint(&r, ctx.rnd)
+	retval := C.bf_rint(&s, ctx.rnd)
     set_bf_retval(retval)
+	return s
 }
 
-pub fn (mut r Bigfloat) rint_ctx(ctx MathContext) {
-	retval := C.bf_rint(&r, ctx.rnd)
+pub fn rint_ctx(r Bigfloat, ctx MathContext) Bigfloat {
+	s := r.clone()
+	retval := C.bf_rint(&s, ctx.rnd)
     set_bf_retval(retval)
+	return s
 }
 
 fn C.bf_round(r &C.bf_t, prec u64, flags u32) int
 
-pub fn round_ctx(ctx MathContext) Bigfloat {
-	r := new()
-	retval := C.bf_round(&r, ctx.prec, ctx.flags)
+pub fn round_ctx(r Bigfloat, ctx MathContext) Bigfloat {
+	s := r.clone()
+	retval := C.bf_round(&s, ctx.prec, ctx.flags)
 	set_bf_retval(retval)
-	return r
+	return s
 }
 
-pub fn round(mut r Bigfloat) int {
+pub fn round(r Bigfloat) Bigfloat {
 	ctx := get_def_math_ctx()
-	return C.bf_round(&r, ctx.prec, ctx.flags)
+	return round_ctx(r, ctx)
 }
 
 // fn C.bf_sqrtrem(r &C.bf_t, rem1 &C.bf_t, a &C.bf_t) int
@@ -740,10 +749,10 @@ pub fn from_str_ctx(str string, ctx AtofContext) ?Bigfloat {
     retval := C.bf_atof(&r, str.str, voidptr(0), ctx.base, ctx.prec, ctx.flags)
     set_bf_retval(retval)
     if ! ctx.accept_nan && r.is_nan() {
-        return error('NaN: invalid string')
+        return error('Invalid string')
     }
     if ! ctx.accept_inf && ! r.is_finite() {
-        return error('NaN: invalid string')
+        return error('Invalid string')
     }
     return r
 }
@@ -1033,7 +1042,6 @@ pub fn atan(a Bigfloat) Bigfloat {
 
 fn C.bf_atan2(r &C.bf_t, y &C.bf_t, x &C.bf_t, prec u64, flags u32) int
 
-/// seems buggy. See _test file
 pub fn atan2_ctx(y Bigfloat, x Bigfloat, ctx MathContext) Bigfloat {
 	r := new()
 	retval := C.bf_atan2(&r, &y, &x, ctx.prec, ctx.flags)

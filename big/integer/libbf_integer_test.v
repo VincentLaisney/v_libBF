@@ -38,7 +38,7 @@ fn test_from_f64() {
 	mut a := big.from_f64(37953.34)
 	// test if the number is realy rounded or only the display
 	assert a.str_base(16) == '9441'
-	a.mul_2exp(8)
+	a = big.mul_2exp(a, 8)
 	assert a.str_base(16) == '944100'
 	assert big.from_f64(6393.83).str() == '6394'
 }
@@ -69,7 +69,7 @@ fn test_from_str() {
 	assert big.get_bf_retval() == big.bf_st_inexact
 	assert a.str_base(10) == '9384' // for testing the rounding
 	assert a.str_base(16) == '24a8' // for testing the rounding of the internal value
-	a.mul_2exp(8)					// and not only the display
+	a = big.mul_2exp(a, 8)					// and not only the display
 	assert a.str_base(16) == '24a800'
 
 	for i := 1; i < 307; i += 61 {
@@ -241,12 +241,12 @@ fn test_multiply() {
 	b = big.from_str('281474976710656') or {panic('')}
 	assert '${a * b}' == '3474999681202237152443873718435840'
 	a = big.from_str('12345678901234567890') or {panic('')}
-	a.mul_2exp(48)
+	a = big.mul_2exp(a, 48)
 	assert '${a}' == '3474999681202237152443873718435840'
 	a = big.from_str('12345678901234567890') or {panic('')}
-	a.mul_2exp(2) // lshift(2)
+	a = big.mul_2exp(a, 2) // lshift(2)
 	b = big.from_str('281474976710656') or {panic('')}
-	b.mul_2exp(4)
+	b = big.mul_2exp(b, 4)
 	assert '${a * b}' == '222399979596943177756407917979893760'
 }
 
@@ -269,7 +269,7 @@ fn test_divide() {
 	ctx.rnd = .rndz
 	assert '${a.div_ctx(b, ctx)}' == '43860'
 	a = big.from_str('12345678901234567890') or {panic('')}
-	a.mul_2exp_ctx(-48, ctx)
+	a = big.mul_2exp_ctx(a, -48, ctx)
 	assert '${a}' == '43860'
 }
 
