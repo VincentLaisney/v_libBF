@@ -415,7 +415,7 @@ pub fn (a Bigfloat) + (b Bigfloat) Bigfloat {
     return r
 }
 
-pub fn (a Bigfloat) add(b Bigfloat, ctx MathContext) Bigfloat {
+pub fn add_ctx(a Bigfloat, b Bigfloat, ctx MathContext) Bigfloat {
     r := new()
 	retval := C.bf_add(&r, &a, &b, ctx.prec, ctx.flags)
     set_bf_retval(retval)
@@ -432,7 +432,7 @@ pub fn (a Bigfloat) - (b Bigfloat) Bigfloat {
     return r
 }
 
-pub fn (a Bigfloat) sub(b Bigfloat, ctx MathContext) Bigfloat {
+pub fn sub_ctx(a Bigfloat, b Bigfloat, ctx MathContext) Bigfloat {
     r := new()
 	retval := C.bf_sub(&r, &a, &b, ctx.prec, ctx.flags)
     set_bf_retval(retval)
@@ -475,6 +475,13 @@ pub fn (a Bigfloat) * (b Bigfloat) Bigfloat {
     return r
 }
 
+pub fn mul_ctx(a Bigfloat) * (b Bigfloat, ctx MathContext) Bigfloat {
+	mut r := new()
+    retval := C.bf_mul(&r, &a, &b, ctx.prec, ctx.flags)
+    set_bf_retval(retval)
+    return r
+}
+
 fn C.bf_mul_ui(r &C.bf_t, a &C.bf_t, b1 u64, prec u64, flags u32) int
 
 pub fn mul_u64_ctx(a Bigfloat, b1 u64, ctx MathContext) Bigfloat {
@@ -511,15 +518,19 @@ pub fn mul_i64(a Bigfloat, b1 i64) Bigfloat {
 
 fn C.bf_mul_2exp(r &C.bf_t, e i64, prec u64, flags u32) int
 
-pub fn (mut r Bigfloat) mul_2exp(e i64) {
+pub fn mul_2exp(r Bigfloat, e i64) Bigfloat {
+	s := r.clone()
     ctx := get_def_math_ctx()
-	retval := C.bf_mul_2exp(&r, e , ctx.prec , ctx.flags | u32(ctx.rnd))
+	retval := C.bf_mul_2exp(&s, e , ctx.prec , ctx.flags | u32(ctx.rnd))
     set_bf_retval(retval)
+	return s
 }
 
-pub fn (mut r Bigfloat) mul_2exp_ctx(e i64, ctx MathContext) {
-	retval := C.bf_mul_2exp(&r, e , ctx.prec , ctx.flags | u32(ctx.rnd))
+pub fn mul_2exp_ctx(r Bigfloat, e i64, ctx MathContext) Bigfloat {
+	s := r.clone()
+	retval := C.bf_mul_2exp(&s, e , ctx.prec , ctx.flags | u32(ctx.rnd))
     set_bf_retval(retval)
+	return s
 }
 
 fn C.bf_div(r &C.bf_t, a &C.bf_t, b &C.bf_t, prec u64, flags u32) int
