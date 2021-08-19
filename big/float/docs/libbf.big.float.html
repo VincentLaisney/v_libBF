@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="x-ua-compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>libbf.big.float | vdoc</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+		<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+		<link rel="manifest" href="site.webmanifest">
+		<link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="theme-color" content="#ffffff">
+		
+		<link rel="stylesheet" href="doc.css" />
+		<link rel="stylesheet" href="normalize.css" />
+		<script src="dark-mode.js"></script>
+	</head>
+	<body>
+		<div id="page">
+			<header class="doc-nav hidden">
+				<div class="heading-container">
+					<div class="heading">
+						<div class="info">
+							<div class="module">libbf.big.float</div>
+							<div class="toggle-version-container">
+								<span></span>
+								<div id="dark-mode-toggle" role="switch" aria-checked="false" aria-label="Toggle dark mode"><svg xmlns="http://www.w3.org/2000/svg" class="light-icon" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" class="dark-icon" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24"><g><rect fill="none" height="24" width="24"/></g><g><g><g><path d="M11.1,12.08C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12c0,0.14,0.02,0.28,0.02,0.42 C2.62,12.15,3.29,12,4,12c1.66,0,3.18,0.83,4.1,2.15C9.77,14.63,11,16.17,11,18c0,1.52-0.87,2.83-2.12,3.51 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C18,17.72,13.38,16.52,11.1,12.08z"/></g><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>
+</div>
+							</div>
+							<svg xmlns="http://www.w3.org/2000/svg" id="toggle-menu" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+
+						</div>
+						<input type="text" id="search" placeholder="Search... (beta)" autocomplete="off">
+					</div>
+				</div>
+				<nav class="search hidden"></nav>
+				<nav class="content hidden">
+					<ul>
+						<li class="open"><a href="#Constants">Constants</a></li>
+<li class="open"><a href="#acos">fn acos</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#acos_ctx">fn acos_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#asin">fn asin</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#asin_ctx">fn asin_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#atan">fn atan</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#atan2">fn atan2</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#atan2_ctx">fn atan2_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#atan_ctx">fn atan_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#bf_free">fn bf_free</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#clear_cache">fn clear_cache</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#cmp">fn cmp</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#context_end">fn context_end</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#context_init">fn context_init</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#cos">fn cos</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#cos_ctx">fn cos_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#delete">fn delete</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#div_ctx">fn div_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#divrem">fn divrem</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#divrem_ctx">fn divrem_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#exp">fn exp</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#exp_ctx">fn exp_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#from_f64">fn from_f64</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#from_i64">fn from_i64</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#from_str">fn from_str</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#from_str_ctx">fn from_str_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#from_u64">fn from_u64</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#get_bf_retval">fn get_bf_retval</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#get_def_atof_ctx">fn get_def_atof_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#get_def_math_ctx">fn get_def_math_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#get_def_print_ctx">fn get_def_print_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#get_exp_min">fn get_exp_min</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#log">fn log</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#log2">fn log2</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#log2_ctx">fn log2_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#log_ctx">fn log_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#logic_and">fn logic_and</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#logic_or">fn logic_or</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#logic_xor">fn logic_xor</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#mul_i64">fn mul_i64</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#mul_i64_ctx">fn mul_i64_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#mul_u64">fn mul_u64</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#mul_u64_ctx">fn mul_u64_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#new">fn new</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#pi">fn pi</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#pi_ctx">fn pi_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#pow">fn pow</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#pow_ctx">fn pow_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#remquo">fn remquo</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#remquo_ctx">fn remquo_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#rint">fn rint</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#rint_ctx">fn rint_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#round">fn round</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#round_ctx">fn round_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#set">fn set</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#set_inf">fn set_inf</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#set_nan">fn set_nan</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#set_zero">fn set_zero</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#sin">fn sin</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#sin_ctx">fn sin_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#sqrt">fn sqrt</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#sqrt_ctx">fn sqrt_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#tan">fn tan</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#tan_ctx">fn tan_ctx</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#Bigfloat">type Bigfloat</a>        <ul>
+<li><a href="#Bigfloat.free">fn free</a></li>
+<li><a href="#Bigfloat.clone">fn clone</a></li>
+<li><a href="#Bigfloat.neg">fn neg</a></li>
+<li><a href="#Bigfloat.is_finite">fn is_finite</a></li>
+<li><a href="#Bigfloat.is_nan">fn is_nan</a></li>
+<li><a href="#Bigfloat.is_zero">fn is_zero</a></li>
+<li><a href="#Bigfloat.f64">fn f64</a></li>
+<li><a href="#Bigfloat.+">fn +</a></li>
+<li><a href="#Bigfloat.add">fn add</a></li>
+<li><a href="#Bigfloat.-">fn -</a></li>
+<li><a href="#Bigfloat.sub">fn sub</a></li>
+<li><a href="#Bigfloat.add_i64_ctx">fn add_i64_ctx</a></li>
+<li><a href="#Bigfloat.add_i64">fn add_i64</a></li>
+<li><a href="#Bigfloat.inc">fn inc</a></li>
+<li><a href="#Bigfloat.dec">fn dec</a></li>
+<li><a href="#Bigfloat.*">fn *</a></li>
+<li><a href="#Bigfloat.mul_2exp">fn mul_2exp</a></li>
+<li><a href="#Bigfloat.mul_2exp_ctx">fn mul_2exp_ctx</a></li>
+<li><a href="#Bigfloat./">fn /</a></li>
+<li><a href="#Bigfloat.rem_ctx">fn rem_ctx</a></li>
+<li><a href="#Bigfloat.%">fn %</a></li>
+<li><a href="#Bigfloat.str_ctx">fn str_ctx</a></li>
+<li><a href="#Bigfloat.str">fn str</a></li>
+<li><a href="#Bigfloat.int">fn int</a></li>
+<li><a href="#Bigfloat.i64">fn i64</a></li>
+</ul>
+</li>
+<li class="open"><a href="#Context.free">type Context</a>        <ul>
+<li><a href="#Context.free">fn free</a></li>
+</ul>
+</li>
+<li class="open"><a href="#Round">enum Round</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#AtofContext">struct AtofContext</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#MathContext">struct MathContext</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#PrintContext">struct PrintContext</a>        <ul>
+</ul>
+</li>
+
+					</ul>
+				</nav>
+			</header>
+			<div class="doc-scrollview">
+				<div class="doc-container">
+					<div class="doc-content">
+						<section id="libbf.big.float" class="doc-node">
+							<div class="title"><h1> libbf.big.float</h1></div>
+
+</section>
+
+						<section id="Constants" class="doc-node const">
+							<div class="title"><h2>Constants <a href="#Constants">#</a></h2></div>
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> prec_max <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token builtin">u64</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator"><<</span> <span class="token punctuation">(</span>limb_bits <span class="token operator">-</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">2</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> prec_inf <span class="token operator">=</span> <span class="token punctuation">(</span>prec_max <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> flag_subnormal <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">3</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> flag_radpnt_prec <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">4</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> def_precision <span class="token operator">=</span> <span class="token builtin">u64</span><span class="token punctuation">(</span><span class="token number">32</span> <span class="token operator">*</span> <span class="token number">32</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> st_invalid_op <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">0</span><span class="token punctuation">)</span></code></pre>
+<p>fn C.bf_get_exp_bits(flags u32) int  // {  //     int e;  //     e = (flags &gt;&gt; BF_EXP_BITS_SHIFT) &amp; BF_EXP_BITS_MASK;  //     if (e == BF_EXP_BITS_MASK)  //         return BF_EXP_BITS_MAX + 1;  //     else  //         return BF_EXP_BITS_MAX - e;  // }  fn C.bf_set_exp_bits(n int) u32  // {      // return ((BF_EXP_BITS_MAX - n) &amp; BF_EXP_BITS_MASK) &lt;&lt; BF_EXP_BITS_SHIFT;  // }  // /* returned status */</p>
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> st_divide_zero <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">1</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> st_overflow <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">2</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> st_underflow <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">3</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> st_inexact <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">4</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> st_mem_error <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">5</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> divrem_euclidian <span class="token operator">=</span> Round<span class="token punctuation">.</span>rndf</code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> atof_no_hex <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">16</span><span class="token punctuation">)</span></code></pre>
+<p>additional flags for bf_atof do not accept hex radix prefix (0x or 0X) if radix = 0 or radix = 16</p>
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> atof_bin_oct <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">17</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> atof_no_nan_inf <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">18</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> atof_exponent <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">19</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> ftoa_format_mask <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">3</span> <span class="token operator"><<</span> <span class="token number">16</span><span class="token punctuation">)</span></code></pre>
+<p>fn C.bf_mul_pow_radix(r &amp;bf_t, t &amp;bf_t, radix u64, expn i64, prec u64, flags u32) int  // /* Conversion of floating point number to string. Return a null  //    terminated string or NULL if memory error. *plen contains its  //    length if plen != NULL.  The exponent letter is &quot;e&quot; for base 10,  //    &quot;p&quot; for bases 2, 8, 16 with a binary exponent and &quot;@&quot; for the other  //    bases. */</p>
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> ftoa_format_fixed <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">0</span> <span class="token operator"><<</span> <span class="token number">16</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> ftoa_format_frac <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">16</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> ftoa_format_free <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">2</span> <span class="token operator"><<</span> <span class="token number">16</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> ftoa_format_free_min <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">3</span> <span class="token operator"><<</span> <span class="token number">16</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> ftoa_force_exp <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">20</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> ftoa_add_prefix <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">21</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> ftoa_js_quirks <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">22</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="" class="doc-node const">
+<pre class="signature"><code><span class="token keyword">const</span> get_int_mod <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator"><<</span> <span class="token number">0</span><span class="token punctuation">)</span></code></pre>
+<p>/* modulo 2^n instead of saturation. NaN and infinity return 0 */</p>
+
+</section>
+						<section id="acos" class="doc-node">
+							<div class="title"><h2>fn acos <a href="#acos">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">acos</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="acos_ctx" class="doc-node">
+							<div class="title"><h2>fn acos_ctx <a href="#acos_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">acos_ctx</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="asin" class="doc-node">
+							<div class="title"><h2>fn asin <a href="#asin">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">asin</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="asin_ctx" class="doc-node">
+							<div class="title"><h2>fn asin_ctx <a href="#asin_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">asin_ctx</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="atan" class="doc-node">
+							<div class="title"><h2>fn atan <a href="#atan">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">atan</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="atan2" class="doc-node">
+							<div class="title"><h2>fn atan2 <a href="#atan2">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">atan2</span><span class="token punctuation">(</span>y Bigfloat<span class="token punctuation">,</span> x Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="atan2_ctx" class="doc-node">
+							<div class="title"><h2>fn atan2_ctx <a href="#atan2_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">atan2_ctx</span><span class="token punctuation">(</span>y Bigfloat<span class="token punctuation">,</span> x Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="atan_ctx" class="doc-node">
+							<div class="title"><h2>fn atan_ctx <a href="#atan_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">atan_ctx</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="bf_free" class="doc-node">
+							<div class="title"><h2>fn bf_free <a href="#bf_free">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">bf_free</span><span class="token punctuation">(</span>s Context<span class="token punctuation">,</span> ptr <span class="token builtin">voidptr</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="clear_cache" class="doc-node">
+							<div class="title"><h2>fn clear_cache <a href="#clear_cache">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">clear_cache</span><span class="token punctuation">(</span>s <span class="token operator">&</span>Context<span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="cmp" class="doc-node">
+							<div class="title"><h2>fn cmp <a href="#cmp">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">cmp</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> b Bigfloat<span class="token punctuation">)</span> <span class="token builtin">int</span></code></pre>
+
+
+</section>
+						<section id="context_end" class="doc-node">
+							<div class="title"><h2>fn context_end <a href="#context_end">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">context_end</span><span class="token punctuation">(</span>s Context<span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="context_init" class="doc-node">
+							<div class="title"><h2>fn context_init <a href="#context_init">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">context_init</span><span class="token punctuation">(</span>s <span class="token operator">&</span>Context<span class="token punctuation">,</span> realloc_func Realloc_func<span class="token punctuation">,</span> realloc_opaque <span class="token builtin">voidptr</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="cos" class="doc-node">
+							<div class="title"><h2>fn cos <a href="#cos">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">cos</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="cos_ctx" class="doc-node">
+							<div class="title"><h2>fn cos_ctx <a href="#cos_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">cos_ctx</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="delete" class="doc-node">
+							<div class="title"><h2>fn delete <a href="#delete">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">delete</span><span class="token punctuation">(</span>r Bigfloat<span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="div_ctx" class="doc-node">
+							<div class="title"><h2>fn div_ctx <a href="#div_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">div_ctx</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> b Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="divrem" class="doc-node">
+							<div class="title"><h2>fn divrem <a href="#divrem">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">divrem</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> b Bigfloat<span class="token punctuation">)</span> <span class="token punctuation">(</span>Bigfloat<span class="token punctuation">,</span> Bigfloat<span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="divrem_ctx" class="doc-node">
+							<div class="title"><h2>fn divrem_ctx <a href="#divrem_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">divrem_ctx</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> b Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> <span class="token punctuation">(</span>Bigfloat<span class="token punctuation">,</span> Bigfloat<span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="exp" class="doc-node">
+							<div class="title"><h2>fn exp <a href="#exp">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">exp</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="exp_ctx" class="doc-node">
+							<div class="title"><h2>fn exp_ctx <a href="#exp_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">exp_ctx</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="from_f64" class="doc-node">
+							<div class="title"><h2>fn from_f64 <a href="#from_f64">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">from_f64</span><span class="token punctuation">(</span>d <span class="token builtin">f64</span><span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="from_i64" class="doc-node">
+							<div class="title"><h2>fn from_i64 <a href="#from_i64">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">from_i64</span><span class="token punctuation">(</span>a <span class="token builtin">i64</span><span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="from_str" class="doc-node">
+							<div class="title"><h2>fn from_str <a href="#from_str">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">from_str</span><span class="token punctuation">(</span>str <span class="token builtin">string</span><span class="token punctuation">)</span> ?Bigfloat</code></pre>
+
+
+</section>
+						<section id="from_str_ctx" class="doc-node">
+							<div class="title"><h2>fn from_str_ctx <a href="#from_str_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">from_str_ctx</span><span class="token punctuation">(</span>str <span class="token builtin">string</span><span class="token punctuation">,</span> ctx AtofContext<span class="token punctuation">)</span> ?Bigfloat</code></pre>
+
+
+</section>
+						<section id="from_u64" class="doc-node">
+							<div class="title"><h2>fn from_u64 <a href="#from_u64">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">from_u64</span><span class="token punctuation">(</span>a <span class="token builtin">u64</span><span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="get_bf_retval" class="doc-node">
+							<div class="title"><h2>fn get_bf_retval <a href="#get_bf_retval">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">get_bf_retval</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">int</span></code></pre>
+
+
+</section>
+						<section id="get_def_atof_ctx" class="doc-node">
+							<div class="title"><h2>fn get_def_atof_ctx <a href="#get_def_atof_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">get_def_atof_ctx</span><span class="token punctuation">(</span><span class="token punctuation">)</span> AtofContext</code></pre>
+
+
+</section>
+						<section id="get_def_math_ctx" class="doc-node">
+							<div class="title"><h2>fn get_def_math_ctx <a href="#get_def_math_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">get_def_math_ctx</span><span class="token punctuation">(</span><span class="token punctuation">)</span> MathContext</code></pre>
+
+
+</section>
+						<section id="get_def_print_ctx" class="doc-node">
+							<div class="title"><h2>fn get_def_print_ctx <a href="#get_def_print_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">get_def_print_ctx</span><span class="token punctuation">(</span><span class="token punctuation">)</span> PrintContext</code></pre>
+
+
+</section>
+						<section id="get_exp_min" class="doc-node">
+							<div class="title"><h2>fn get_exp_min <a href="#get_exp_min">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">get_exp_min</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token builtin">i64</span></code></pre>
+
+
+</section>
+						<section id="log" class="doc-node">
+							<div class="title"><h2>fn log <a href="#log">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">log</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="log2" class="doc-node">
+							<div class="title"><h2>fn log2 <a href="#log2">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">log2</span><span class="token punctuation">(</span><span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="log2_ctx" class="doc-node">
+							<div class="title"><h2>fn log2_ctx <a href="#log2_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">log2_ctx</span><span class="token punctuation">(</span>ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="log_ctx" class="doc-node">
+							<div class="title"><h2>fn log_ctx <a href="#log_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">log_ctx</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="logic_and" class="doc-node">
+							<div class="title"><h2>fn logic_and <a href="#logic_and">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">logic_and</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> b Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="logic_or" class="doc-node">
+							<div class="title"><h2>fn logic_or <a href="#logic_or">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">logic_or</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> b Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="logic_xor" class="doc-node">
+							<div class="title"><h2>fn logic_xor <a href="#logic_xor">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">logic_xor</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> b Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="mul_i64" class="doc-node">
+							<div class="title"><h2>fn mul_i64 <a href="#mul_i64">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">mul_i64</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> b1 <span class="token builtin">i64</span><span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="mul_i64_ctx" class="doc-node">
+							<div class="title"><h2>fn mul_i64_ctx <a href="#mul_i64_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">mul_i64_ctx</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> b1 <span class="token builtin">i64</span><span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="mul_u64" class="doc-node">
+							<div class="title"><h2>fn mul_u64 <a href="#mul_u64">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">mul_u64</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> b1 <span class="token builtin">u64</span><span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="mul_u64_ctx" class="doc-node">
+							<div class="title"><h2>fn mul_u64_ctx <a href="#mul_u64_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">mul_u64_ctx</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> b1 <span class="token builtin">u64</span><span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="new" class="doc-node">
+							<div class="title"><h2>fn new <a href="#new">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="pi" class="doc-node">
+							<div class="title"><h2>fn pi <a href="#pi">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">pi</span><span class="token punctuation">(</span><span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="pi_ctx" class="doc-node">
+							<div class="title"><h2>fn pi_ctx <a href="#pi_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">pi_ctx</span><span class="token punctuation">(</span>ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="pow" class="doc-node">
+							<div class="title"><h2>fn pow <a href="#pow">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">pow</span><span class="token punctuation">(</span>x Bigfloat<span class="token punctuation">,</span> y Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="pow_ctx" class="doc-node">
+							<div class="title"><h2>fn pow_ctx <a href="#pow_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">pow_ctx</span><span class="token punctuation">(</span>x Bigfloat<span class="token punctuation">,</span> y Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="remquo" class="doc-node">
+							<div class="title"><h2>fn remquo <a href="#remquo">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">remquo</span><span class="token punctuation">(</span>pq <span class="token operator">&</span><span class="token builtin">i64</span><span class="token punctuation">,</span> <span class="token keyword">mut</span> r Bigfloat<span class="token punctuation">,</span> a Bigfloat<span class="token punctuation">,</span> b Bigfloat<span class="token punctuation">)</span> <span class="token builtin">int</span></code></pre>
+
+
+</section>
+						<section id="remquo_ctx" class="doc-node">
+							<div class="title"><h2>fn remquo_ctx <a href="#remquo_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">remquo_ctx</span><span class="token punctuation">(</span>pq <span class="token operator">&</span><span class="token builtin">i64</span><span class="token punctuation">,</span> <span class="token keyword">mut</span> r Bigfloat<span class="token punctuation">,</span> a Bigfloat<span class="token punctuation">,</span> b Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> <span class="token builtin">int</span></code></pre>
+
+
+</section>
+						<section id="rint" class="doc-node">
+							<div class="title"><h2>fn rint <a href="#rint">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">rint</span><span class="token punctuation">(</span>r Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="rint_ctx" class="doc-node">
+							<div class="title"><h2>fn rint_ctx <a href="#rint_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">rint_ctx</span><span class="token punctuation">(</span>r Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="round" class="doc-node">
+							<div class="title"><h2>fn round <a href="#round">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">round</span><span class="token punctuation">(</span>r Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="round_ctx" class="doc-node">
+							<div class="title"><h2>fn round_ctx <a href="#round_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">round_ctx</span><span class="token punctuation">(</span>r Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="set" class="doc-node">
+							<div class="title"><h2>fn set <a href="#set">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">set</span><span class="token punctuation">(</span><span class="token keyword">mut</span> r Bigfloat<span class="token punctuation">,</span> a Bigfloat<span class="token punctuation">)</span> <span class="token builtin">int</span></code></pre>
+
+
+</section>
+						<section id="set_inf" class="doc-node">
+							<div class="title"><h2>fn set_inf <a href="#set_inf">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">set_inf</span><span class="token punctuation">(</span><span class="token keyword">mut</span> r Bigfloat<span class="token punctuation">,</span> is_inf <span class="token builtin">int</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="set_nan" class="doc-node">
+							<div class="title"><h2>fn set_nan <a href="#set_nan">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">set_nan</span><span class="token punctuation">(</span><span class="token keyword">mut</span> r Bigfloat<span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="set_zero" class="doc-node">
+							<div class="title"><h2>fn set_zero <a href="#set_zero">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">set_zero</span><span class="token punctuation">(</span><span class="token keyword">mut</span> r Bigfloat<span class="token punctuation">,</span> is_neg <span class="token builtin">int</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="sin" class="doc-node">
+							<div class="title"><h2>fn sin <a href="#sin">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">sin</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="sin_ctx" class="doc-node">
+							<div class="title"><h2>fn sin_ctx <a href="#sin_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">sin_ctx</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="sqrt" class="doc-node">
+							<div class="title"><h2>fn sqrt <a href="#sqrt">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">sqrt</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="sqrt_ctx" class="doc-node">
+							<div class="title"><h2>fn sqrt_ctx <a href="#sqrt_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">sqrt_ctx</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="tan" class="doc-node">
+							<div class="title"><h2>fn tan <a href="#tan">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">tan</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="tan_ctx" class="doc-node">
+							<div class="title"><h2>fn tan_ctx <a href="#tan_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">tan_ctx</span><span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="Bigfloat" class="doc-node">
+							<div class="title"><h2>type Bigfloat <a href="#Bigfloat">#</a></h2></div><pre class="signature"><code><span class="token keyword">type</span> Bigfloat <span class="token operator">=</span> C<span class="token punctuation">.</span>bf_t</code></pre>
+
+
+</section>
+						<section id="Bigfloat.free" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) free <a href="#Bigfloat.free">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a <span class="token operator">&</span>Bigfloat<span class="token punctuation">)</span> <span class="token function">free</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="Bigfloat.clone" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) clone <a href="#Bigfloat.clone">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="Bigfloat.neg" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) neg <a href="#Bigfloat.neg">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> r Bigfloat<span class="token punctuation">)</span> <span class="token function">neg</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="Bigfloat.is_finite" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) is_finite <a href="#Bigfloat.is_finite">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token function">is_finite</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">bool</span></code></pre>
+
+
+</section>
+						<section id="Bigfloat.is_nan" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) is_nan <a href="#Bigfloat.is_nan">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token function">is_nan</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">bool</span></code></pre>
+
+
+</section>
+						<section id="Bigfloat.is_zero" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) is_zero <a href="#Bigfloat.is_zero">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token function">is_zero</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">bool</span></code></pre>
+
+
+</section>
+						<section id="Bigfloat.f64" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) f64 <a href="#Bigfloat.f64">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token builtin">f64</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">f64</span></code></pre>
+
+
+</section>
+						<section id="Bigfloat.+" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) + <a href="#Bigfloat.+">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span>b Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="Bigfloat.add" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) add <a href="#Bigfloat.add">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token function">add</span><span class="token punctuation">(</span>b Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="Bigfloat.-" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) - <a href="#Bigfloat.-">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token punctuation">(</span>b Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="Bigfloat.sub" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) sub <a href="#Bigfloat.sub">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token function">sub</span><span class="token punctuation">(</span>b Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="Bigfloat.add_i64_ctx" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) add_i64_ctx <a href="#Bigfloat.add_i64_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token function">add_i64_ctx</span><span class="token punctuation">(</span>b1 <span class="token builtin">i64</span><span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="Bigfloat.add_i64" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) add_i64 <a href="#Bigfloat.add_i64">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token function">add_i64</span><span class="token punctuation">(</span>b1 <span class="token builtin">i64</span><span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="Bigfloat.inc" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) inc <a href="#Bigfloat.inc">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> a Bigfloat<span class="token punctuation">)</span> <span class="token function">inc</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="Bigfloat.dec" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) dec <a href="#Bigfloat.dec">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> a Bigfloat<span class="token punctuation">)</span> <span class="token function">dec</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="Bigfloat.*" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) * <a href="#Bigfloat.*">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token punctuation">(</span>b Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="Bigfloat.mul_2exp" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) mul_2exp <a href="#Bigfloat.mul_2exp">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> r Bigfloat<span class="token punctuation">)</span> <span class="token function">mul_2exp</span><span class="token punctuation">(</span>e <span class="token builtin">i64</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="Bigfloat.mul_2exp_ctx" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) mul_2exp_ctx <a href="#Bigfloat.mul_2exp_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> r Bigfloat<span class="token punctuation">)</span> <span class="token function">mul_2exp_ctx</span><span class="token punctuation">(</span>e <span class="token builtin">i64</span><span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="Bigfloat./" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) / <a href="#Bigfloat./">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span>b Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="Bigfloat.rem_ctx" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) rem_ctx <a href="#Bigfloat.rem_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token function">rem_ctx</span><span class="token punctuation">(</span>b Bigfloat<span class="token punctuation">,</span> ctx MathContext<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="Bigfloat.%" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) % <a href="#Bigfloat.%">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token punctuation">(</span>b Bigfloat<span class="token punctuation">)</span> Bigfloat</code></pre>
+
+
+</section>
+						<section id="Bigfloat.str_ctx" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) str_ctx <a href="#Bigfloat.str_ctx">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token function">str_ctx</span><span class="token punctuation">(</span>ctx PrintContext<span class="token punctuation">)</span> <span class="token builtin">string</span></code></pre>
+
+
+</section>
+						<section id="Bigfloat.str" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) str <a href="#Bigfloat.str">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token function">str</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">string</span></code></pre>
+
+
+</section>
+						<section id="Bigfloat.int" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) int <a href="#Bigfloat.int">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">int</span></code></pre>
+
+
+</section>
+						<section id="Bigfloat.i64" class="doc-node">
+							<div class="title"><h2>fn (Bigfloat) i64 <a href="#Bigfloat.i64">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Bigfloat<span class="token punctuation">)</span> <span class="token builtin">i64</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">i64</span></code></pre>
+
+
+</section>
+						<section id="Context.free" class="doc-node">
+							<div class="title"><h2>fn (Context) free <a href="#Context.free">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>a Context<span class="token punctuation">)</span> <span class="token function">free</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+
+
+</section>
+						<section id="Round" class="doc-node">
+							<div class="title"><h2>enum Round <a href="#Round">#</a></h2></div><pre class="signature"><code><span class="token keyword">enum</span> <span class="token symbol">Round</span> <span class="token punctuation">{</span>
+	rndn
+	rndz
+	rndd
+	rndu
+	rndna
+	rnda
+	rndf
+<span class="token punctuation">}</span></code></pre>
+<p>struct C.bfdec_t {      // /* must be kept identical to bf_t */      // struct bf_context_t *ctx;      // int sign;      // i64 expn;      // u64 len;      // u64 *tab;  }  pub type Bigdec = C.bfdec_t</p>
+
+</section>
+						<section id="AtofContext" class="doc-node">
+							<div class="title"><h2>struct AtofContext <a href="#AtofContext">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">AtofContext</span> <span class="token punctuation">{</span>
+<span class="token keyword">pub</span> <span class="token keyword">mut</span><span class="token punctuation">:</span>
+	base       <span class="token builtin">int</span>
+	prec       <span class="token builtin">u64</span>
+	flags      <span class="token builtin">u32</span>
+	rnd        Round
+	accept_nan <span class="token builtin">bool</span>
+	accept_inf <span class="token builtin">bool</span>
+<span class="token punctuation">}</span></code></pre>
+
+
+</section>
+						<section id="MathContext" class="doc-node">
+							<div class="title"><h2>struct MathContext <a href="#MathContext">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">MathContext</span> <span class="token punctuation">{</span>
+<span class="token keyword">pub</span> <span class="token keyword">mut</span><span class="token punctuation">:</span>
+	prec  <span class="token builtin">u64</span>
+	rnd   Round
+	flags <span class="token builtin">u32</span>
+<span class="token punctuation">}</span></code></pre>
+
+
+</section>
+						<section id="PrintContext" class="doc-node">
+							<div class="title"><h2>struct PrintContext <a href="#PrintContext">#</a></h2></div><pre class="signature"><code><span class="token keyword">struct</span> <span class="token symbol">PrintContext</span> <span class="token punctuation">{</span>
+<span class="token keyword">pub</span> <span class="token keyword">mut</span><span class="token punctuation">:</span>
+	base      <span class="token builtin">int</span>
+	prec      <span class="token builtin">u64</span>
+	flags     <span class="token builtin">u32</span>
+	rnd       Round
+	dont_trim <span class="token builtin">bool</span>
+<span class="token punctuation">}</span></code></pre>
+
+
+</section>
+
+						<div class="footer">
+							Powered by vdoc. Generated on: 19 Aug 2021 16:11:06
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<script src="doc.js"></script>
+		<script async src="search_index.js" type="text/javascript"></script>
+	</body>
+</html>
