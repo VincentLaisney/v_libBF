@@ -1,0 +1,111 @@
+[94mmodule[39m [32mlibbf.big.decimal[39m
+
+[94mconst[39m prec_max = (([32mu64[39m([94m1[39m) << (limb_bits - [94m2[39m)) - [94m2[39m)
+[94mconst[39m prec_inf = (prec_max + [94m1[39m)
+[94mconst[39m flag_subnormal = ([94m1[39m << [94m3[39m)
+[94mconst[39m flag_radpnt_prec = ([94m1[39m << [94m4[39m)
+[94mconst[39m def_precision = [32mu64[39m([94m32[39m * [94m32[39m)
+[94mconst[39m st_invalid_op = ([94m1[39m << [94m0[39m)
+[94mconst[39m st_divide_zero = ([94m1[39m << [94m1[39m)
+[94mconst[39m st_overflow = ([94m1[39m << [94m2[39m)
+[94mconst[39m st_underflow = ([94m1[39m << [94m3[39m)
+[94mconst[39m st_inexact = ([94m1[39m << [94m4[39m)
+[94mconst[39m st_mem_error = ([94m1[39m << [94m5[39m)
+[94mconst[39m divrem_euclidian = [32mRound[39m.rndf
+[94mconst[39m atof_no_hex = ([94m1[39m << [94m16[39m)
+[94mconst[39m atof_bin_oct = ([94m1[39m << [94m17[39m)
+[94mconst[39m atof_no_nan_inf = ([94m1[39m << [94m18[39m)
+[94mconst[39m atof_exponent = ([94m1[39m << [94m19[39m)
+[94mconst[39m ftoa_format_mask = ([94m3[39m << [94m16[39m)
+[94mconst[39m ftoa_format_fixed = ([94m0[39m << [94m16[39m)
+[94mconst[39m ftoa_format_frac = ([94m1[39m << [94m16[39m)
+[94mconst[39m ftoa_format_free = ([94m2[39m << [94m16[39m)
+[94mconst[39m ftoa_format_free_min = ([94m3[39m << [94m16[39m)
+[94mconst[39m ftoa_force_exp = ([94m1[39m << [94m20[39m)
+[94mconst[39m ftoa_add_prefix = ([94m1[39m << [94m21[39m)
+[94mconst[39m ftoa_js_quirks = ([94m1[39m << [94m22[39m)
+[94mconst[39m get_int_mod = ([94m1[39m << [94m0[39m)
+[94mfn[39m [36mbf_free[39m(s [32mContext[39m, ptr [32mvoidptr[39m)
+[94mfn[39m [36mclear_cache[39m(s &[32mContext[39m)
+[94mfn[39m [36mcmp[39m(a [32mBigdecimal[39m, b [32mBigdecimal[39m) [32mint[39m
+[94mfn[39m [36mcontext_end[39m(s [32mContext[39m)
+[94mfn[39m [36mcontext_init[39m(s &[32mContext[39m, realloc_func [32mRealloc_func[39m, realloc_opaque [32mvoidptr[39m)
+[94mfn[39m [36mdelete[39m(r [32mBigdecimal[39m)
+[94mfn[39m [36mdiv_ctx[39m(a [32mBigdecimal[39m, b [32mBigdecimal[39m, ctx [32mMathContext[39m) [32mBigdecimal[39m
+[94mfn[39m [36mdivrem[39m(a [32mBigdecimal[39m, b [32mBigdecimal[39m) (Bigdecimal, Bigdecimal)
+[94mfn[39m [36mdivrem_ctx[39m(a [32mBigdecimal[39m, b [32mBigdecimal[39m, ctx [32mMathContext[39m) (Bigdecimal, Bigdecimal)
+[94mfn[39m [36mfrom_i64[39m(a [32mi64[39m) [32mBigdecimal[39m
+[94mfn[39m [36mfrom_str[39m(str [32mstring[39m) ?[32mBigdecimal[39m
+[94mfn[39m [36mfrom_str_ctx[39m(str [32mstring[39m, ctx [32mAtofContext[39m) ?[32mBigdecimal[39m
+[94mfn[39m [36mfrom_u64[39m(a [32mu64[39m) [32mBigdecimal[39m
+[94mfn[39m [36mget_bf_retval[39m() [32mint[39m
+[94mfn[39m [36mget_def_atof_ctx[39m() [32mAtofContext[39m
+[94mfn[39m [36mget_def_math_ctx[39m() [32mMathContext[39m
+[94mfn[39m [36mget_def_print_ctx[39m() [32mPrintContext[39m
+[94mfn[39m [36mnew[39m() [32mBigdecimal[39m
+[94mfn[39m [36mpow_u64[39m(a [32mBigdecimal[39m, b [32mu64[39m) [32mBigdecimal[39m
+[94mfn[39m [36mround[39m(r [32mBigdecimal[39m) [32mBigdecimal[39m
+[94mfn[39m [36mround_ctx[39m(r [32mBigdecimal[39m, ctx [32mMathContext[39m) [32mBigdecimal[39m
+[94mfn[39m [36mset[39m([94mmut[39m r [32mBigdecimal[39m, a [32mBigdecimal[39m) [32mint[39m
+[94mfn[39m [36mset_inf[39m([94mmut[39m r [32mBigdecimal[39m, is_neg [32mbool[39m)
+[94mfn[39m [36mset_nan[39m([94mmut[39m r [32mBigdecimal[39m)
+[94mfn[39m [36mset_zero[39m([94mmut[39m r [32mBigdecimal[39m, is_neg [32mbool[39m)
+[94mfn[39m [36msqrt[39m(a [32mBigdecimal[39m) [32mBigdecimal[39m
+[94mfn[39m [36msqrt_ctx[39m(a [32mBigdecimal[39m, ctx [32mMathContext[39m) [32mBigdecimal[39m
+[94mtype[39m [32mBigdecimal[39m = [35mC[39m.[32mbfdec_t[39m
+[94mfn[39m (a &[32mBigdecimal[39m) [36mfree[39m()
+[94mfn[39m (a [32mBigdecimal[39m) [36mclone[39m() [32mBigdecimal[39m
+[94mfn[39m ([94mmut[39m r [32mBigdecimal[39m) [36mneg[39m()
+[94mfn[39m (a [32mBigdecimal[39m) [36mis_finite[39m() [32mbool[39m
+[94mfn[39m (a [32mBigdecimal[39m) [36mis_nan[39m() [32mbool[39m
+[94mfn[39m (a [32mBigdecimal[39m) [36mis_zero[39m() [32mbool[39m
+[94mfn[39m (a [32mBigdecimal[39m) + (b [32mBigdecimal[39m) [32mBigdecimal[39m
+[94mfn[39m (a [32mBigdecimal[39m) [36madd[39m(b [32mBigdecimal[39m, ctx [32mMathContext[39m) [32mBigdecimal[39m
+[94mfn[39m (a [32mBigdecimal[39m) - (b [32mBigdecimal[39m) [32mBigdecimal[39m
+[94mfn[39m (a [32mBigdecimal[39m) [36msub[39m(b [32mBigdecimal[39m, ctx [32mMathContext[39m) [32mBigdecimal[39m
+[94mfn[39m (a [32mBigdecimal[39m) [36madd_i64_ctx[39m(b1 [32mi64[39m, ctx [32mMathContext[39m) [32mBigdecimal[39m
+[94mfn[39m (a [32mBigdecimal[39m) [36madd_i64[39m(b1 [32mi64[39m) [32mBigdecimal[39m
+[94mfn[39m ([94mmut[39m a [32mBigdecimal[39m) [36minc[39m()
+[94mfn[39m ([94mmut[39m a [32mBigdecimal[39m) [36mdec[39m()
+[94mfn[39m (a [32mBigdecimal[39m) * (b [32mBigdecimal[39m) [32mBigdecimal[39m
+[94mfn[39m (a [32mBigdecimal[39m) [36mmul_i64_ctx[39m(b1 [32mi64[39m, ctx [32mMathContext[39m) [32mBigdecimal[39m
+[94mfn[39m (a [32mBigdecimal[39m) [36mmul_i64[39m(b1 [32mi64[39m) [32mBigdecimal[39m
+[94mfn[39m (a [32mBigdecimal[39m) / (b [32mBigdecimal[39m) [32mBigdecimal[39m
+[94mfn[39m (a [32mBigdecimal[39m) [36mrem_ctx[39m(b [32mBigdecimal[39m, ctx [32mMathContext[39m) [32mBigdecimal[39m
+[94mfn[39m (a [32mBigdecimal[39m) % (b [32mBigdecimal[39m) [32mBigdecimal[39m
+[94mfn[39m ([94mmut[39m r [32mBigdecimal[39m) [36mrint[39m()
+[94mfn[39m ([94mmut[39m r [32mBigdecimal[39m) [36mrint_ctx[39m(ctx [32mMathContext[39m)
+[94mfn[39m (a [32mBigdecimal[39m) [36mstr_ctx[39m(ctx [32mPrintContext[39m) [32mstring[39m
+[94mfn[39m (a [32mBigdecimal[39m) [36mstr[39m() [32mstring[39m
+[94mfn[39m (a [32mBigdecimal[39m) [36mint[39m() [32mint[39m
+[94mfn[39m (a [32mContext[39m) [36mfree[39m()
+[94menum[39m [32mRound[39m {
+	rndn
+	rndz
+	rndd
+	rndu
+	rndna
+	rnda
+	rndf
+}
+[94mstruct[39m [32mAtofContext[39m {
+[94mpub[39m [94mmut[39m:
+	prec       [32mu64[39m
+	flags      [32mu32[39m
+	rnd        [32mRound[39m
+	accept_nan [32mbool[39m
+	accept_inf [32mbool[39m
+}
+[94mstruct[39m [32mMathContext[39m {
+[94mpub[39m [94mmut[39m:
+	prec  [32mu64[39m
+	rnd   [32mRound[39m
+	flags [32mu32[39m
+}
+[94mstruct[39m [32mPrintContext[39m {
+[94mpub[39m [94mmut[39m:
+	prec      [32mu64[39m
+	flags     [32mu32[39m
+	rnd       [32mRound[39m
+	dont_trim [32mbool[39m
+}
