@@ -210,7 +210,7 @@ fn init () {
     context_init(get_bf_context(), def_realloc, voidptr(0))
 }
 
-fn def_realloc(opaque voidptr, ptr &byte, size u32) &byte {
+fn def_realloc(opaque voidptr, ptr &byte, size u64) &byte {
 	unsafe {
 		if ptr == 0 {
 			return malloc(int(size))
